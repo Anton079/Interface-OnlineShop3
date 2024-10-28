@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Interface_OnlineShop3.Orders.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,17 @@ using System.Threading.Tasks;
 
 namespace Interface_OnlineShop.Orders.Repository
 {
-    internal interface IOrdersRepository
+    public interface IOrdersRepository
     {
+        List<Order> GetAll();
+
+        Order AddOrder(Order orders);
+
+        Order Remove(int id);
+
+        Order FindById(int id);
+
+        Order UpdateOrders(int id, Order orders);
+
     }
 }
