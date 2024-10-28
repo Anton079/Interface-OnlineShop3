@@ -83,7 +83,7 @@ namespace Interface_OnlineShop.OrderDetails.Repository
             return orderDetailsList;
         }
 
-        public OrderDetail Add(OrderDetail orderDetails)
+        public OrderDetail AddOrderDetail(OrderDetail orderDetails)
         {
             if(orderDetails != null)
             {

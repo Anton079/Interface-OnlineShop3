@@ -333,9 +333,9 @@ namespace Interface_OnlineShop3
         public void ActualizeazaProdus()
         {
             Console.WriteLine("Introduceti ID-ul produsului de actualizat:");
-            int id = int.Parse(Console.ReadLine());
+            int idWanted = int.Parse(Console.ReadLine());
 
-            Product produs = _productQueryService.FindProductById(id);
+            Product produs = _productQueryService.FindProductById(idWanted);
             if (produs != null)
             {
                 bool updating = true;
@@ -383,7 +383,9 @@ namespace Interface_OnlineShop3
                     }
                 }
 
-                _productComandService.UpdateProduct(id);
+                Product newProduct = new Product(idWanted,produs.Name, produs.Price, produs.Descriptions, produs.CreateDate,produs.Stock);
+
+                _productComandService.UpdateProduct(idWanted, newProduct);
                 Console.WriteLine("Produsul a fost actualizat cu succes.");
             }
             else

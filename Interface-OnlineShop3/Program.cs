@@ -14,6 +14,7 @@ using Interface_OnlineShop3.Products.Repository;
 using Interface_OnlineShop3.Products.Service;
 using Interface_OnlineShop3.Products.Models;
 using System.Runtime.CompilerServices;
+using System.Diagnostics;
 
 namespace Interface_OnlineShop3
 {
@@ -88,13 +89,31 @@ namespace Interface_OnlineShop3
 
 
             Order order = new Order(1, 1, 10,"Pitesti");
-            Order orderNew = new Order(2, 2, 20, "Buc");
+            Order orderNew = new Order(2, 2, 20, "Rusia");
+            Order orderNew3 = new Order(4, 6, 50, "Bulgaria");
+            Order orderNew4 = new Order(5, 6, 70, "Mulgaria");
+
+
 
             //ordersRepository.AddOrder(order);
 
             //ordersCommandService.AddOrders(order);
 
-            //ordersCommandService.UpdateOrders(orderNew);         ??????????
+            //ordersCommandService.UpdateOrders(1, orderNew);
+
+            //ordersRepository.UpdateOrders(1, orderNew);
+
+            //ordersRepository.AddOrder(orderNew3);
+
+            //ordersCommandService.AddOrders(orderNew4);
+
+
+            OrderDetail orderDetail = new OrderDetail(1,1,1,10,10);
+            OrderDetail orderDetai2 = new OrderDetail(2, 2, 2, 15, 23);
+            OrderDetail orderDetai3 = new OrderDetail(3, 2, 2, 50, 41);
+
+            orderDetailsRepository.AddOrderDetail(orderDetai2);
+
 
 
 

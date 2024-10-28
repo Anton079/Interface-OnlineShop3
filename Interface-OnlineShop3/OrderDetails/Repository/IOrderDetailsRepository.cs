@@ -11,7 +11,7 @@ namespace Interface_OnlineShop.OrderDetails.Repository
     {
         List<OrderDetail> GetAll();
 
-        OrderDetail Add(OrderDetail orderDetails);
+        OrderDetail AddOrderDetail(OrderDetail orderDetails);
 
         OrderDetail Remove(int id);
 

@@ -21,7 +21,7 @@ namespace Interface_OnlineShop.OrderDetails.Service
         {
             if (orderDetails != null && _orderDetailsRepository.FindById(orderDetails.Id) == null)
             {
-                _orderDetailsRepository.Add(orderDetails);
+                _orderDetailsRepository.AddOrderDetail(orderDetails);
                 return orderDetails;
             }
             return null;
