@@ -2,14 +2,14 @@
 using Interface_OnlineShop3.OrderDetails.Models;
 using Interface_OnlineShop3.Orders.Models;
 using Interface_OnlineShop3.Customers.Models;
-using Interface_OnlineShop.Products.Service;
 using Interface_OnlineShop3.Products.Service;
 using Interface_OnlineShop3.Products.Models;
-using Interface_OnlineShop.Customers.Service;
 using System;
 using System.Collections.Generic;
+using Interface_OnlineShop.Customers.Service;
 using Interface_OnlineShop.OrderDetails.Service;
 using Interface_OnlineShop.Orders.Service;
+using Interface_OnlineShop.Products.Service;
 
 namespace Interface_OnlineShop3
 {
@@ -48,7 +48,6 @@ namespace Interface_OnlineShop3
         public void Meniu()
         {
             Console.WriteLine("");
-            Console.WriteLine("");
             Console.WriteLine("Selectati o optiune:");
 
             Console.WriteLine("\n--- Comenzi ---");
@@ -56,21 +55,25 @@ namespace Interface_OnlineShop3
             Console.WriteLine("2.  Afisati detalii despre comenzi");
             Console.WriteLine("3.  Adaugati o noua comanda");
             Console.WriteLine("4.  Actualizati o comanda");
-            Console.WriteLine("5.  Afisati toate detaliile comenzii");
+
+            Console.WriteLine("\n--- Detalii Comanda ---");
+            Console.WriteLine("5.  Afisati toate detaliile comenzilor");
+            Console.WriteLine("6.  Adaugati un detaliu de comanda");
+            Console.WriteLine("7.  Actualizati un detaliu de comanda");
 
             Console.WriteLine("\n--- Clienti ---");
-            Console.WriteLine("6.  Afisati toti clientii");
-            Console.WriteLine("7.  Adaugati un client");
-            Console.WriteLine("8.  Actualizati un client");
-            Console.WriteLine("9.  Stergeti un client");
+            Console.WriteLine("8.  Afisati toti clientii");
+            Console.WriteLine("9.  Adaugati un client");
+            Console.WriteLine("10. Actualizati un client");
+            Console.WriteLine("11. Stergeti un client");
 
             Console.WriteLine("\n--- Produse ---");
-            Console.WriteLine("10. Afisati toate produsele");
-            Console.WriteLine("11. Adaugati un produs");
-            Console.WriteLine("12. Actualizati un produs");
-            Console.WriteLine("13. Stergeti un produs");
+            Console.WriteLine("12. Afisati toate produsele");
+            Console.WriteLine("13. Adaugati un produs");
+            Console.WriteLine("14. Actualizati un produs");
+            Console.WriteLine("15. Stergeti un produs");
 
-            Console.WriteLine("\n14. Iesire");
+            Console.WriteLine("\n16. Iesire");
         }
 
         public void Play()
@@ -99,30 +102,36 @@ namespace Interface_OnlineShop3
                         AfisareDetaliiComanda();
                         break;
                     case "6":
-                        AfisareClienti();
+                        AdaugaDetaliuComanda();
                         break;
                     case "7":
-                        AdaugaClient();
+                        ActualizeazaDetaliuComanda();
                         break;
                     case "8":
-                        ActualizeazaClient();
+                        AfisareClienti();
                         break;
                     case "9":
-                        StergeClient();
+                        AdaugaClient();
                         break;
                     case "10":
-                        AfisareProduse();
+                        ActualizeazaClient();
                         break;
                     case "11":
-                        AdaugaProdus();
+                        StergeClient();
                         break;
                     case "12":
-                        ActualizeazaProdus();
+                        AfisareProduse();
                         break;
                     case "13":
-                        StergeProdus();
+                        AdaugaProdus();
                         break;
                     case "14":
+                        ActualizeazaProdus();
+                        break;
+                    case "15":
+                        StergeProdus();
+                        break;
+                    case "16":
                         running = false;
                         break;
                     default:
@@ -183,7 +192,7 @@ namespace Interface_OnlineShop3
                 string shippingAddress = Console.ReadLine();
                 comanda.ShippingAddress = shippingAddress;
 
-                _ordersCommandService.UpdateOrders(id,comanda);
+                _ordersCommandService.UpdateOrders(id, comanda);
                 Console.WriteLine("Comanda a fost actualizata cu succes.");
             }
             else
@@ -192,18 +201,62 @@ namespace Interface_OnlineShop3
             }
         }
 
+        // --- Detalii Comanda Functions ---
         public void AfisareDetaliiComanda()
         {
-            Console.WriteLine("Introduceti ID-ul comenzii pentru detalii:");
-            int orderId = int.Parse(Console.ReadLine());
-
             List<OrderDetail> detaliiComanda = _orderDetailsQueryService.GetAllOrderDetails();
             foreach (OrderDetail detaliu in detaliiComanda)
             {
-                if (detaliu.OrderId == orderId)
-                {
-                    Console.WriteLine(detaliu);
-                }
+                Console.WriteLine(detaliu);
+            }
+        }
+
+        public void AdaugaDetaliuComanda()
+        {
+            Console.WriteLine("Introduceti ID-ul detaliului de comanda:");
+            int id = int.Parse(Console.ReadLine());
+
+            Console.WriteLine("Introduceti ID-ul comenzii:");
+            int orderId = int.Parse(Console.ReadLine());
+
+            Console.WriteLine("Introduceti ID-ul produsului:");
+            int productId = int.Parse(Console.ReadLine());
+
+            Console.WriteLine("Introduceti pretul:");
+            int price = Int32.Parse(Console.ReadLine());
+
+            Console.WriteLine("Introduceti cantitatea:");
+            int quantity = int.Parse(Console.ReadLine());
+
+            OrderDetail newOrderDetail = new OrderDetail(id, orderId, productId, price, quantity);
+            _orderDetailsCommandService.AddOrderDetails(newOrderDetail);
+
+            Console.WriteLine("Detaliul de comanda a fost adaugat cu succes.");
+        }
+
+        public void ActualizeazaDetaliuComanda()
+        {
+            Console.WriteLine("Introduceti ID-ul detaliului de comanda de actualizat:");
+            int id = int.Parse(Console.ReadLine());
+
+            OrderDetail detaliuComanda = _orderDetailsQueryService.FindOrderDetailsById(id);
+            if (detaliuComanda != null)
+            {
+                Console.WriteLine("Introduceti noul ID al produsului:");
+                detaliuComanda.ProductId = int.Parse(Console.ReadLine());
+
+                Console.WriteLine("Introduceti noul pret:");
+                detaliuComanda.Price = Int32.Parse(Console.ReadLine());
+
+                Console.WriteLine("Introduceti noua cantitate:");
+                detaliuComanda.Quantity = int.Parse(Console.ReadLine());
+
+                _orderDetailsCommandService.UpdateOrderDetails(id, detaliuComanda);
+                Console.WriteLine("Detaliul de comanda a fost actualizat cu succes.");
+            }
+            else
+            {
+                Console.WriteLine("Detaliul de comanda cu acest ID nu a fost gasit.");
             }
         }
 
@@ -260,7 +313,7 @@ namespace Interface_OnlineShop3
                 Console.WriteLine("Introduceti noua adresa de facturare:");
                 client.BillingAddress = Console.ReadLine();
 
-                _customerCommandService.UpdateCustomer(id,client);
+                _customerCommandService.UpdateCustomer(id, client);
                 Console.WriteLine("Clientul a fost actualizat cu succes.");
             }
             else
@@ -302,7 +355,6 @@ namespace Interface_OnlineShop3
                 Console.WriteLine(x);
             }
         }
-
 
         public void AdaugaProdus()
         {
@@ -383,9 +435,7 @@ namespace Interface_OnlineShop3
                     }
                 }
 
-                Product newProduct = new Product(idWanted,produs.Name, produs.Price, produs.Descriptions, produs.CreateDate,produs.Stock);
-
-                _productComandService.UpdateProduct(idWanted, newProduct);
+                _productComandService.UpdateProduct(idWanted, produs);
                 Console.WriteLine("Produsul a fost actualizat cu succes.");
             }
             else
