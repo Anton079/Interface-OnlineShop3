@@ -141,7 +141,7 @@ namespace Interface_OnlineShop3
             }
         }
 
-        // --- Comenzi Functions ---
+        // --- Order ---
         public void AfisareComenzi()
         {
             List<Order> comenzi = _ordersQueryService.GetAllOrders();
@@ -154,6 +154,10 @@ namespace Interface_OnlineShop3
         public void AfisareDetaliiComenzi()
         {
             List<OrderDetail> detaliiComenzi = _orderDetailsQueryService.GetAllOrderDetails();
+            if(detaliiComenzi == null)
+            {
+                Console.WriteLine("lista este goala");
+            }
             foreach (OrderDetail x in detaliiComenzi)
             {
                 Console.WriteLine(x);
@@ -201,10 +205,14 @@ namespace Interface_OnlineShop3
             }
         }
 
-        // --- Detalii Comanda Functions ---
+        // --- Detalii Comanda ---
         public void AfisareDetaliiComanda()
         {
             List<OrderDetail> detaliiComanda = _orderDetailsQueryService.GetAllOrderDetails();
+            if(detaliiComanda == null)
+            {
+                Console.WriteLine("lista este goala");
+            }
             foreach (OrderDetail detaliu in detaliiComanda)
             {
                 Console.WriteLine(detaliu);
@@ -260,10 +268,16 @@ namespace Interface_OnlineShop3
             }
         }
 
-        // --- Clienti Functions ---
+        // --- Customer ---
         public void AfisareClienti()
         {
             List<Customer> clienti = _customerQueryService.GetAllCustomers();
+
+            if(clienti == null)
+            {
+                Console.WriteLine("Lista este goala");
+            }
+
             foreach (Customer client in clienti)
             {
                 Console.WriteLine(client);
@@ -339,7 +353,7 @@ namespace Interface_OnlineShop3
             }
         }
 
-        // --- Produse Functions ---
+        // --- Products ---
         public void AfisareProduse()
         {
             List<Product> list = _productQueryService.getAll();

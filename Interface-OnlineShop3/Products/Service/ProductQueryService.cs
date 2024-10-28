@@ -10,11 +10,11 @@ namespace Interface_OnlineShop.Products.Service
 {
     public class ProductQueryService : IProductQueryService
     {
-        private IProductRepository _proQRepository;
+        private IProductRepository _prodRepository;
 
         public ProductQueryService(IProductRepository proQRepository)
         {
-            _proQRepository = proQRepository;
+            _prodRepository = proQRepository;
         }
 
         //crud
@@ -23,16 +23,16 @@ namespace Interface_OnlineShop.Products.Service
         {
             List<Product> products = new List<Product>();
 
-            if(products.Count == 0)
+            if(products != null)
             {
-                return null;
+                return _prodRepository.getAll();
             }
-            return products;
+            return null;
         }
 
         public Product FindProductById(int id)
         {
-            Product product = _proQRepository.FindById(id);
+            Product product = _prodRepository.FindById(id);
 
             return product;
         }

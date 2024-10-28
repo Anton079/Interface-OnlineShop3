@@ -43,9 +43,9 @@ namespace Interface_OnlineShop3
 
 
 
-            //View view = new View(ordersQueryService, ordersCommandService, orderDetailsQueryService, orderDetailsCommandService, customerQueryService, customerCommandService, productQueryService, productComandService);
+            View view = new View(ordersQueryService, ordersCommandService, orderDetailsQueryService, orderDetailsCommandService, customerQueryService, customerCommandService, productQueryService, productComandService);
 
-            //view.Play();
+            view.Play();
 
 
 
@@ -112,9 +112,23 @@ namespace Interface_OnlineShop3
             OrderDetail orderDetai2 = new OrderDetail(2, 2, 2, 15, 23);
             OrderDetail orderDetai3 = new OrderDetail(3, 2, 2, 50, 41);
 
-            orderDetailsRepository.AddOrderDetail(orderDetai2);
+            //orderDetailsRepository.AddOrderDetail(orderDetai2);
+
+            //orderDetailsCommandService.AddOrderDetails(orderDetai3);
+
+            //orderDetailsRepository.UpdateOrderDetails(2, orderDetail);
+
+            //orderDetailsRepository.Remove(3);
 
 
+
+
+            //List<Product> lista = productRepository.getAll();
+
+            //foreach (Product x in lista)
+            //{
+            //    Console.WriteLine(x);
+            //}
 
 
 
