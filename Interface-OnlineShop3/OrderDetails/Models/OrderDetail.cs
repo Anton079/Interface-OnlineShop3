@@ -34,11 +34,34 @@ namespace Interface_OnlineShop3.OrderDetails.Models
             _quantity = quantity;
         }
 
-        public int Id { get; set; }
-        public int OrderId { get; set; }
-        public int ProductId { get; set; }
-        public int Price { get; set; }
-        public int Quantity { get; set; }
+        public int Id
+        {
+            get { return _id; }
+            set { _id = value; }
+        }
+        
+        public int OrderId
+        {
+            get { return _orderId; }
+            set { _orderId = value; }
+        }
+
+        public int ProductId
+        {
+            get { return _productId; }
+            set { _productId = value; }
+        }
+
+        public int Price
+        {
+            get { return _price; }
+            set { _price = value; }
+        }
+        public int Quantity
+        {
+            get { return _quantity; }
+            set { _quantity = value; }
+        }
 
         public override string ToString()
         {
