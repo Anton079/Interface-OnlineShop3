@@ -13,5 +13,6 @@ namespace Interface_OnlineShop.Orders.Service
 
         Order FindOrdersById(int id);
 
+        int GenerateId();
     }
 }

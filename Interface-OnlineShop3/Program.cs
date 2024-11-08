@@ -36,19 +36,24 @@ namespace Interface_OnlineShop3
             CustomerQueryService customerQueryService = new CustomerQueryService(customerRepository);
             CustomerCommandService customerCommandService = new CustomerCommandService(customerRepository);
 
-            ProductQueryService productQueryService = new ProductQueryService(productRepository);
+            ProductQueryService productQueryService = new ProductQueryService(productRepository); 
             ProductComandService productComandService = new ProductComandService(productRepository);
 
 
 
 
 
-            View view = new View(ordersQueryService, ordersCommandService, orderDetailsQueryService, orderDetailsCommandService, customerQueryService, customerCommandService, productQueryService, productComandService);
+            //View view = new View(ordersQueryService, ordersCommandService, orderDetailsQueryService, orderDetailsCommandService, customerQueryService, customerCommandService, productQueryService, productComandService);
 
-            view.Play();
+            //view.Play();
+
+
+            //ViewLoginPage viewLoginPage = new ViewLoginPage();
+            //viewLoginPage.Play();
 
 
 
+            //PRODUCT
 
 
             Product pro = new Product(6, "pepene",10,"rosu",101012024,50);
@@ -67,7 +72,7 @@ namespace Interface_OnlineShop3
 
 
 
-
+            //CUSTOMER
 
             Customer customer = new Customer(4, "ionut@gmail.com", "raul", "raulmarius", "buc");
             Customer updateCustomer = new Customer(6, "Raulentiu@gmail.com", "miha", "manolache", "Pitesti");
@@ -86,7 +91,7 @@ namespace Interface_OnlineShop3
 
 
 
-
+            //ORDER
 
             Order order = new Order(1, 1, 10,"Pitesti");
             Order orderNew = new Order(2, 2, 20, "Rusia");
@@ -108,6 +113,9 @@ namespace Interface_OnlineShop3
             //ordersCommandService.AddOrders(orderNew4);
 
 
+
+            //ORDERDETAILS
+
             OrderDetail orderDetail = new OrderDetail(1,1,1,10,10);
             OrderDetail orderDetai2 = new OrderDetail(2, 2, 2, 15, 23);
             OrderDetail orderDetai3 = new OrderDetail(3, 2, 2, 50, 41);
@@ -122,6 +130,7 @@ namespace Interface_OnlineShop3
 
 
 
+            //PRODUCTS
 
             //List<Product> lista = productRepository.getAll();
 

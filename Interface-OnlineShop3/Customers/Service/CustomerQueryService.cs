@@ -24,7 +24,11 @@ namespace Interface_OnlineShop.Customers.Service
 
         public Customer FindCustomerById(int id)
         {
-            return _customerRepository.FindById(id);
+            if(id != -1)
+            {
+                return _customerRepository.FindById(id);
+            }
+            return null;
         }
     }
 }

@@ -15,5 +15,7 @@ namespace Interface_OnlineShop3.OrderDetails.Service
 
         OrderDetail FindOrderDetailsById(int id);
 
+        int GenerateId();
+
     }
 }

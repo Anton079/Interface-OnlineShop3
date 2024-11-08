@@ -37,5 +37,19 @@ namespace Interface_OnlineShop.Orders.Service
 
             return null;
         }
+
+        public int GenerateId()
+        {
+            Random rand = new Random();
+
+            int id = rand.Next(1, 10000000);
+
+            while (FindOrdersById(id) != null)
+            {
+                id = rand.Next(1, 10000000);
+            }
+
+            return id;
+        }
     }
 }
