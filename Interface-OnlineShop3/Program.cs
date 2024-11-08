@@ -48,8 +48,8 @@ namespace Interface_OnlineShop3
             //view.Play();
 
 
-            //ViewLoginPage viewLoginPage = new ViewLoginPage();
-            //viewLoginPage.Play();
+            ViewLoginPage viewLoginPage = new ViewLoginPage(ordersQueryService, ordersCommandService, orderDetailsQueryService, orderDetailsCommandService, customerQueryService, customerCommandService, productQueryService, productComandService);
+            viewLoginPage.Play();
 
 
 

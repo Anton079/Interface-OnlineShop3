@@ -64,6 +64,9 @@ namespace Interface_OnlineShop3
                     case "3":
                         PlaceOrder();
                         break;
+                    case "4":
+                        EditOrder();
+                        break;
                     case "5":
                         ShowAllOrders();
                         break;
@@ -166,6 +169,68 @@ namespace Interface_OnlineShop3
                 Console.WriteLine($"ID: {order.Id}, Total: {order.Amount}, Adresa: {order.ShippingAddress}");
             }
         }
+
+        public void EditOrder()
+        {
+            List<Order> allOrders = _ordersQueryService.GetAllOrders();
+            List<Order> customerOrders = new List<Order>();
+
+            for (int i = 0; i < allOrders.Count; i++)
+            {
+                if (allOrders[i].CustomerId == _customer.Id)
+                {
+                    customerOrders.Add(allOrders[i]);
+                }
+            }
+
+            if (customerOrders.Count == 0)
+            {
+                Console.WriteLine("Nu aveti comenzi de editat.");
+                return;
+            }
+
+            Console.WriteLine("Comenzile dvs.:");
+            for (int i = 0; i < customerOrders.Count; i++)
+            {
+                Order order = customerOrders[i];
+                Console.WriteLine("ID: " + order.Id + ", Total: " + order.Amount + ", Adresa de livrare: " + order.ShippingAddress);
+            }
+
+            Console.Write("Introduceti ID-ul comenzii pe care doriti sa o editati: ");
+            int orderId = Int32.Parse(Console.ReadLine());
+
+            Order selectedOrder = null;
+            for (int i = 0; i < customerOrders.Count; i++)
+            {
+                if (customerOrders[i].Id == orderId)
+                {
+                    selectedOrder = customerOrders[i];
+                    break;
+                }
+            }
+
+            if (selectedOrder == null)
+            {
+                Console.WriteLine("ID-ul comenzii nu este valid.");
+                return;
+            }
+
+            Console.WriteLine("Editare comanda - ID: " + selectedOrder.Id);
+
+            Console.Write("Adresa de livrare actuala (" + selectedOrder.ShippingAddress + "): ");
+            string newShippingAddress = Console.ReadLine();
+            if (!string.IsNullOrEmpty(newShippingAddress))
+            {
+                selectedOrder.ShippingAddress = newShippingAddress;
+            }
+
+            _ordersCommandService.UpdateOrders(orderId, selectedOrder);
+
+            Console.WriteLine("Comanda a fost actualizata cu succes.");
+        }
+
+
+
 
 
     }

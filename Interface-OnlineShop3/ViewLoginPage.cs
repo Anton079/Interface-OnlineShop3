@@ -1,19 +1,45 @@
 ﻿using Interface_OnlineShop.Customers.Service;
+using Interface_OnlineShop.OrderDetails.Service;
+using Interface_OnlineShop.Orders.Service;
+using Interface_OnlineShop.Products.Service;
 using Interface_OnlineShop3.Customers.Models;
+using Interface_OnlineShop3.OrderDetails.Service;
+using Interface_OnlineShop3.Products.Service;
 using System;
 
 namespace Interface_OnlineShop3
 {
     public class ViewLoginPage
     {
-        private ICustomerCommandService _customerCommandService;
-        private ICustomerQueryService _customerQueryService;
         private Customer _customer;
+        private IOrdersQueryService _ordersQueryService;
+        private IOrdersCommandService _ordersCommandService;
 
-        public ViewLoginPage(ICustomerCommandService customerCommandService, ICustomerQueryService customerQueryService)
+        private IOrderDetailsQueryService _orderDetailsQueryService;
+        private IOrderDetailsCommandService _orderDetailsCommandService;
+
+        private ICustomerQueryService _customerQueryService;
+        private ICustomerCommandService _customerCommandService;
+
+        private IProductQueryService _productQueryService;
+        private IProductComandService _productComandService;
+
+        public ViewLoginPage(IOrdersQueryService ordersQueryService, IOrdersCommandService ordersCommandService,
+                    IOrderDetailsQueryService orderDetailsQueryService, IOrderDetailsCommandService orderDetailsCommandService,
+                    ICustomerQueryService customerQueryService, ICustomerCommandService customerCommandService,
+                    IProductQueryService productQueryService, IProductComandService productComandService)
         {
-            _customerCommandService = customerCommandService;
+            _ordersQueryService = ordersQueryService;
+            _ordersCommandService = ordersCommandService;
+
+            _orderDetailsQueryService = orderDetailsQueryService;
+            _orderDetailsCommandService = orderDetailsCommandService;
+
             _customerQueryService = customerQueryService;
+            _customerCommandService = customerCommandService;
+
+            _productQueryService = productQueryService;
+            _productComandService = productComandService;
         }
 
         public void LoginMeniu()
@@ -62,7 +88,9 @@ namespace Interface_OnlineShop3
             {
                 Console.WriteLine("V-ati logat cu succes, " + customer.FullName + "!");
                 _customer = customer;
-                
+                ViewUser viewUser = new ViewUser( _customer,_ordersCommandService,_orderDetailsCommandService,_productQueryService,_ordersQueryService,_orderDetailsQueryService);
+                viewUser.Play();
+
             }
             else
             {
