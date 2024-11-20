@@ -8,6 +8,7 @@ using Interface_OnlineShop3.Orders.Models;
 using Interface_OnlineShop3.Products.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -43,6 +44,7 @@ namespace Interface_OnlineShop3
             Console.WriteLine("3. Plaseaza Comanda");
             Console.WriteLine("4. Editeaza comanda");
             Console.WriteLine("5. Afiseaza toate comenzile tale");
+            Console.WriteLine("6. Afiseaza toate detaliitle comenzilor tale");
         }
 
         public void Play()
@@ -70,10 +72,59 @@ namespace Interface_OnlineShop3
                     case "5":
                         ShowAllOrders();
                         break;
+                    case "6":
+                        AfisareDetaliiComenzi();
+                        break;
                     default:
                         running = false;
                         break;
                 }
+            }
+        }
+
+        public void AfisareDetaliiComenzi()
+        {
+            List<OrderDetail> detaliiComenzi = _orderDetailsQueryService.GetAllOrderDetails();
+            List<Order> allOrders = _ordersQueryService.GetAllOrders();
+
+            if (allOrders == null)
+            {
+                Console.WriteLine("Nu ai comenzi pe care sa le afisam!");
+            }
+
+            Console.WriteLine("=====Comenziile tale=======");
+            foreach (OrderDetail orderDetail in detaliiComenzi)
+            {
+                foreach (Order order in allOrders)
+                {
+                    if (orderDetail.OrderId == order.Id)
+                    {
+                        
+                        Console.WriteLine($"Id ul comenzii:{orderDetail.OrderId}, Cantitatea:{orderDetail.Quantity}, Pret:{orderDetail.Price} ");
+                    }
+                }
+            }
+            Console.WriteLine("===========================");
+
+        }
+
+        public void ShowAllOrders()
+        {
+            List<Order> allOrders = _ordersQueryService.GetAllOrders();
+            List<Order> customerOrders = new List<Order>();
+
+            foreach (Order order in allOrders)
+            {
+                if (order.CustomerId == _customer.Id)
+                {
+                    customerOrders.Add(order);
+                }
+            }
+
+            Console.WriteLine("Comenzile tale:");
+            foreach (Order order in customerOrders)
+            {
+                Console.WriteLine($"ID: {order.Id}, Total: {order.Amount}, Adresa: {order.ShippingAddress}");
             }
         }
 
@@ -150,26 +201,6 @@ namespace Interface_OnlineShop3
             cos.Clear();
         }
 
-        public void ShowAllOrders()
-        {
-            List<Order> allOrders = _ordersQueryService.GetAllOrders();
-            List<Order> customerOrders = new List<Order>();
-
-            foreach (Order order in allOrders)
-            {
-                if (order.CustomerId == _customer.Id)
-                {
-                    customerOrders.Add(order);
-                }
-            }
-
-            Console.WriteLine("Comenzile tale:");
-            foreach (Order order in customerOrders)
-            {
-                Console.WriteLine($"ID: {order.Id}, Total: {order.Amount}, Adresa: {order.ShippingAddress}");
-            }
-        }
-
         public void EditOrder()
         {
             List<Order> allOrders = _ordersQueryService.GetAllOrders();
@@ -228,8 +259,6 @@ namespace Interface_OnlineShop3
 
             Console.WriteLine("Comanda a fost actualizata cu succes.");
         }
-
-
 
 
 
