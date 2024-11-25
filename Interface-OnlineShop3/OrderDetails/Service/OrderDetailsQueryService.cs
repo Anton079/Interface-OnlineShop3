@@ -1,13 +1,12 @@
-﻿using Interface_OnlineShop.OrderDetails.Repository;
-using Interface_OnlineShop3.OrderDetails.Models;
-using Interface_OnlineShop3.OrderDetails.Service;
+﻿using Interface_OnlineShop3.OrderDetails.Models;
+using Interface_OnlineShop3.OrderDetails.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Interface_OnlineShop.OrderDetails.Service
+namespace Interface_OnlineShop3.OrderDetails.Service
 {
     public class OrderDetailsQueryService : IOrderDetailsQueryService
     {
@@ -25,7 +24,7 @@ namespace Interface_OnlineShop.OrderDetails.Service
 
         public OrderDetail FindOrderDetailsById(int id)
         {
-            if(id != -1)
+            if (id != -1)
             {
                 return _orderDetailsRepository.FindById(id);
             }

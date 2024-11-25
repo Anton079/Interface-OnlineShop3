@@ -1,12 +1,12 @@
-﻿using Interface_OnlineShop.Customers.Repository;
-using Interface_OnlineShop3.Customers.Models;
+﻿using Interface_OnlineShop3.Customers.Models;
+using Interface_OnlineShop3.Customers.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Interface_OnlineShop.Customers.Service
+namespace Interface_OnlineShop3.Customers.Service
 {
     public class CustomerQueryService : ICustomerQueryService
     {
@@ -24,7 +24,7 @@ namespace Interface_OnlineShop.Customers.Service
 
         public Customer FindCustomerById(int id)
         {
-            if(id != -1)
+            if (id != -1)
             {
                 return _customerRepository.FindById(id);
             }

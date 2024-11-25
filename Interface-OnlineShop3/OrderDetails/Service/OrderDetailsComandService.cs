@@ -1,12 +1,12 @@
-﻿using Interface_OnlineShop.OrderDetails.Repository;
-using Interface_OnlineShop3.OrderDetails.Models;
+﻿using Interface_OnlineShop3.OrderDetails.Models;
+using Interface_OnlineShop3.OrderDetails.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Interface_OnlineShop.OrderDetails.Service
+namespace Interface_OnlineShop3.OrderDetails.Service
 {
     public class OrderDetailsCommandService : IOrderDetailsCommandService
     {
@@ -42,7 +42,7 @@ namespace Interface_OnlineShop.OrderDetails.Service
         {
             if (orderDetails != null && _orderDetailsRepository.FindById(id) != null)
             {
-                _orderDetailsRepository.UpdateOrderDetails(id ,orderDetails);
+                _orderDetailsRepository.UpdateOrderDetails(id, orderDetails);
                 return orderDetails;
             }
             return null;

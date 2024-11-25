@@ -1,5 +1,5 @@
-﻿using Interface_OnlineShop.OrderDetails.Repository;
-using Interface_OnlineShop.OrderDetails.Service;
+﻿using Interface_OnlineShop3.OrderDetails.Repository;
+using Interface_OnlineShop3.OrderDetails.Service;
 using Interface_OnlineShop3.OrderDetails.Models;
 using System;
 using System.Collections.Generic;

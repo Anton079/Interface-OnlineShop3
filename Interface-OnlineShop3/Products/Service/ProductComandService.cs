@@ -29,7 +29,7 @@ namespace Interface_OnlineShop3.Products.Service
 
         public Product AddProduct(Product productAdd)
         {
-            if(productAdd != null && _productRepository.FindById(productAdd.Id) == null) 
+            if (productAdd != null && _productRepository.FindById(productAdd.Id) == null)
             {
                 _productRepository.Add(productAdd);
                 return productAdd;
@@ -37,10 +37,10 @@ namespace Interface_OnlineShop3.Products.Service
             return null;
         }
 
-        public Product UpdateProduct(int id,Product newProduct)
+        public Product UpdateProduct(int id, Product newProduct)
         {
 
-            if(newProduct != null && _productRepository.FindById(id) != null)
+            if (newProduct != null && _productRepository.FindById(id) != null)
             {
                 _productRepository.Add(newProduct);
                 return newProduct;

@@ -1,12 +1,12 @@
-﻿using Interface_OnlineShop.Orders.Repository;
-using Interface_OnlineShop3.Orders.Models;
+﻿using Interface_OnlineShop3.Orders.Models;
+using Interface_OnlineShop3.Orders.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Interface_OnlineShop.Orders.Service
+namespace Interface_OnlineShop3.Orders.Service
 {
     public class OrdersQueryService : IOrdersQueryService
     {
@@ -24,7 +24,7 @@ namespace Interface_OnlineShop.Orders.Service
                 return _ordersRepository.GetAll();
             }
 
-            return null ;
+            return null;
         }
 
         public Order FindOrdersById(int id)

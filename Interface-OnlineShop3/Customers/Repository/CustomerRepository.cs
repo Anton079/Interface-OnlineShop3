@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Interface_OnlineShop.Customers.Repository
+namespace Interface_OnlineShop3.Customers.Repository
 {
     public class CustomerRepository : ICustomerRepository
     {
@@ -28,7 +28,7 @@ namespace Interface_OnlineShop.Customers.Repository
                     while ((line = sr.ReadLine()) != null)
                     {
                         Customer customer = new Customer(line);
-                        this.customerList.Add(customer);
+                        customerList.Add(customer);
                     }
                 }
             }
@@ -84,8 +84,8 @@ namespace Interface_OnlineShop.Customers.Repository
 
         public Customer AddCustomer(Customer customer)
         {
-            this.customerList.Add(customer);
-            this.SaveData();
+            customerList.Add(customer);
+            SaveData();
             return customer;
         }
 
@@ -94,7 +94,7 @@ namespace Interface_OnlineShop.Customers.Repository
             Customer cs = FindById(id);
 
             customerList.Remove(cs);
-            this.SaveData();
+            SaveData();
             return cs;
         }
 
@@ -122,7 +122,7 @@ namespace Interface_OnlineShop.Customers.Repository
                 customerUpdate.FullName = customer.FullName;
                 customerUpdate.BillingAddress = customer.BillingAddress;
 
-                this.SaveData();
+                SaveData();
             }
             Console.WriteLine("Este null");
             return customerUpdate;

@@ -39,7 +39,7 @@ namespace Interface_OnlineShop3.OrderDetails.Models
             get { return _id; }
             set { _id = value; }
         }
-        
+
         public int OrderId
         {
             get { return _orderId; }

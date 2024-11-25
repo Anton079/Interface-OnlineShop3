@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Interface_OnlineShop.Customers.Repository
+namespace Interface_OnlineShop3.Customers.Repository
 {
     public interface ICustomerRepository
     {
@@ -17,7 +17,7 @@ namespace Interface_OnlineShop.Customers.Repository
 
         Customer FindById(int id);
 
-        Customer UpdateCustomer(int id,Customer customer);
+        Customer UpdateCustomer(int id, Customer customer);
 
     }
 }

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Interface_OnlineShop.OrderDetails.Repository
+namespace Interface_OnlineShop3.OrderDetails.Repository
 {
     public class OrderDetailsRepository : IOrderDetailsRepository
     {
@@ -27,7 +27,7 @@ namespace Interface_OnlineShop.OrderDetails.Repository
                     while ((line = sr.ReadLine()) != null)
                     {
                         OrderDetail orderDetails = new OrderDetail(line);
-                        this.orderDetailsList.Add(orderDetails);
+                        orderDetailsList.Add(orderDetails);
                     }
                 }
             }
@@ -85,10 +85,10 @@ namespace Interface_OnlineShop.OrderDetails.Repository
 
         public OrderDetail AddOrderDetail(OrderDetail orderDetails)
         {
-            if(orderDetails != null)
+            if (orderDetails != null)
             {
-                this.orderDetailsList.Add(orderDetails);
-                this.SaveData();
+                orderDetailsList.Add(orderDetails);
+                SaveData();
                 return orderDetails;
             }
 
@@ -99,10 +99,10 @@ namespace Interface_OnlineShop.OrderDetails.Repository
         {
             OrderDetail od = FindById(id);
 
-            if(od != null)
+            if (od != null)
             {
                 orderDetailsList.Remove(od);
-                this.SaveData();
+                SaveData();
                 return od;
             }
             return null;
@@ -120,7 +120,7 @@ namespace Interface_OnlineShop.OrderDetails.Repository
             return null;
         }
 
-        public OrderDetail UpdateOrderDetails(int id,OrderDetail orderDetails)
+        public OrderDetail UpdateOrderDetails(int id, OrderDetail orderDetails)
         {
             OrderDetail orderDetailsUpdate = FindById(id);
 
@@ -131,7 +131,7 @@ namespace Interface_OnlineShop.OrderDetails.Repository
                 orderDetailsUpdate.Price = orderDetails.Price;
                 orderDetailsUpdate.Quantity = orderDetails.Quantity;
 
-                this.SaveData();
+                SaveData();
             }
             return orderDetailsUpdate;
         }

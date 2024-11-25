@@ -1,13 +1,11 @@
-﻿using Interface_OnlineShop.Customers.Service;
-using Interface_OnlineShop.OrderDetails.Service;
-using Interface_OnlineShop.Orders.Service;
-using Interface_OnlineShop.Products.Service;
-using Interface_OnlineShop3.Customers.Models;
+﻿using Interface_OnlineShop3.Customers.Models;
+using Interface_OnlineShop3.Customers.Service;
 using Interface_OnlineShop3.OrderDetails.Service;
+using Interface_OnlineShop3.Orders.Service;
 using Interface_OnlineShop3.Products.Service;
 using System;
 
-namespace Interface_OnlineShop3
+namespace Interface_OnlineShop3.playground
 {
     public class ViewLoginPage
     {
@@ -88,7 +86,7 @@ namespace Interface_OnlineShop3
             {
                 Console.WriteLine("V-ati logat cu succes, " + customer.FullName + "!");
                 _customer = customer;
-                ViewUser viewUser = new ViewUser( _customer,_ordersCommandService,_orderDetailsCommandService,_productQueryService,_ordersQueryService,_orderDetailsQueryService);
+                ViewUser viewUser = new ViewUser(_customer, _ordersCommandService, _orderDetailsCommandService, _productQueryService, _ordersQueryService, _orderDetailsQueryService);
                 viewUser.Play();
 
             }

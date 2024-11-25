@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Interface_OnlineShop.Products.Service
+namespace Interface_OnlineShop3.Products.Service
 {
     public class ProductQueryService : IProductQueryService
     {
@@ -23,7 +23,7 @@ namespace Interface_OnlineShop.Products.Service
         {
             List<Product> products = new List<Product>();
 
-            if(products != null)
+            if (products != null)
             {
                 return _prodRepository.getAll();
             }

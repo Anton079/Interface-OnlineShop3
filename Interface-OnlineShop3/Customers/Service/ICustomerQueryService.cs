@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Interface_OnlineShop.Customers.Service
+namespace Interface_OnlineShop3.Customers.Service
 {
     public interface ICustomerQueryService
     {

@@ -28,7 +28,7 @@ namespace Interface_OnlineShop3.Products.Repository
                     while ((line = sr.ReadLine()) != null)
                     {
                         Product products = new Product(line);
-                        this.productsList.Add(products);
+                        productsList.Add(products);
                     }
                 }
             }
@@ -92,10 +92,10 @@ namespace Interface_OnlineShop3.Products.Repository
         {
             Product prod = FindById(products.Id);
 
-            if(prod == null)
+            if (prod == null)
             {
-                this.productsList.Add(products);
-                this.SaveData();
+                productsList.Add(products);
+                SaveData();
             }
 
             return products;
@@ -105,10 +105,10 @@ namespace Interface_OnlineShop3.Products.Repository
         {
             Product pro = FindById(id);
 
-            if(pro != null)
+            if (pro != null)
             {
-                this.productsList.Remove(pro);
-                this.SaveData();
+                productsList.Remove(pro);
+                SaveData();
                 return pro;
             }
 
@@ -139,7 +139,7 @@ namespace Interface_OnlineShop3.Products.Repository
                 existingProduct.CreateDate = updatedProduct.CreateDate;
                 existingProduct.Stock = updatedProduct.Stock;
 
-                this.SaveData();
+                SaveData();
             }
             return existingProduct;
         }

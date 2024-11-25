@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Interface_OnlineShop.Orders.Service
+namespace Interface_OnlineShop3.Orders.Service
 {
     public interface IOrdersCommandService
     {
@@ -13,7 +13,7 @@ namespace Interface_OnlineShop.Orders.Service
 
         int RemoveOrders(int id);
 
-        Order UpdateOrders(int id,Order orders);
+        Order UpdateOrders(int id, Order orders);
 
     }
 }

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Interface_OnlineShop.Orders.Repository
+namespace Interface_OnlineShop3.Orders.Repository
 {
     public class OrdersRepository : IOrdersRepository
     {
@@ -27,7 +27,7 @@ namespace Interface_OnlineShop.Orders.Repository
                     while ((line = sr.ReadLine()) != null)
                     {
                         Order orders = new Order(line);
-                        this.ordersList.Add(orders);
+                        ordersList.Add(orders);
                     }
                 }
             }
@@ -84,10 +84,10 @@ namespace Interface_OnlineShop.Orders.Repository
 
         public Order AddOrder(Order orders)
         {
-            if(orders != null)
+            if (orders != null)
             {
-                this.ordersList.Add(orders);
-                this.SaveData();
+                ordersList.Add(orders);
+                SaveData();
                 return orders;
             }
 
@@ -96,14 +96,14 @@ namespace Interface_OnlineShop.Orders.Repository
 
         public Order Remove(int id)
         {
-            foreach(Order x in ordersList)
+            foreach (Order x in ordersList)
             {
                 Order order = FindById(id);
 
                 if (x.Id == order.Id)
                 {
                     ordersList.Remove(order);
-                    this.SaveData();
+                    SaveData();
                     return order;
                 }
             }
@@ -132,7 +132,7 @@ namespace Interface_OnlineShop.Orders.Repository
                 ordersUpdate.Amount = orders.Amount;
                 ordersUpdate.ShippingAddress = orders.ShippingAddress;
 
-                this.SaveData();
+                SaveData();
                 return ordersUpdate;
             }
             return null;

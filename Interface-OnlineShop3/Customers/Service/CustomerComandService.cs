@@ -1,5 +1,5 @@
-﻿using Interface_OnlineShop.Customers.Repository;
-using Interface_OnlineShop3.Customers.Models;
+﻿using Interface_OnlineShop3.Customers.Models;
+using Interface_OnlineShop3.Customers.Repository;
 using Interface_OnlineShop3.Products.Models;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Interface_OnlineShop.Customers.Service
+namespace Interface_OnlineShop3.Customers.Service
 {
     public class CustomerCommandService : ICustomerCommandService
     {
@@ -40,9 +40,9 @@ namespace Interface_OnlineShop.Customers.Service
 
         public Customer UpdateCustomer(int id, Customer customer)
         {
-            if(id != -1 &&  customer != null)
+            if (id != -1 && customer != null)
             {
-                _customerRepository.UpdateCustomer(id,customer);
+                _customerRepository.UpdateCustomer(id, customer);
                 return customer;
             }
             return null;

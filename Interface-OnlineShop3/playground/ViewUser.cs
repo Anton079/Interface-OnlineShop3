@@ -1,11 +1,10 @@
-﻿using Interface_OnlineShop.OrderDetails.Service;
-using Interface_OnlineShop.Orders.Service;
-using Interface_OnlineShop.Products.Service;
-using Interface_OnlineShop3.Customers.Models;
+﻿using Interface_OnlineShop3.Customers.Models;
 using Interface_OnlineShop3.OrderDetails.Models;
 using Interface_OnlineShop3.OrderDetails.Service;
 using Interface_OnlineShop3.Orders.Models;
+using Interface_OnlineShop3.Orders.Service;
 using Interface_OnlineShop3.Products.Models;
+using Interface_OnlineShop3.Products.Service;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
@@ -13,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Interface_OnlineShop3
+namespace Interface_OnlineShop3.playground
 {
     public class ViewUser
     {
@@ -99,7 +98,7 @@ namespace Interface_OnlineShop3
                 {
                     if (orderDetail.OrderId == order.Id)
                     {
-                        
+
                         Console.WriteLine($"Id ul comenzii:{orderDetail.OrderId}, Cantitatea:{orderDetail.Quantity}, Pret:{orderDetail.Price} ");
                     }
                 }
@@ -152,7 +151,7 @@ namespace Interface_OnlineShop3
             }
 
             Console.WriteLine("Introduceti ID-ul produsului pe care doriti sa-l adaugati in cos:");
-            int productId = Int32.Parse(Console.ReadLine());
+            int productId = int.Parse(Console.ReadLine());
 
             Product selectedProduct = _productQueryService.FindProductById(productId);
             if (selectedProduct != null && selectedProduct.Stock > 0)
@@ -228,7 +227,7 @@ namespace Interface_OnlineShop3
             }
 
             Console.Write("Introduceti ID-ul comenzii pe care doriti sa o editati: ");
-            int orderId = Int32.Parse(Console.ReadLine());
+            int orderId = int.Parse(Console.ReadLine());
 
             Order selectedOrder = null;
             for (int i = 0; i < customerOrders.Count; i++)

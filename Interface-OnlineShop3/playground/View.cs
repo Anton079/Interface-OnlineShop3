@@ -1,17 +1,15 @@
-﻿using Interface_OnlineShop3.OrderDetails.Service;
-using Interface_OnlineShop3.OrderDetails.Models;
-using Interface_OnlineShop3.Orders.Models;
-using Interface_OnlineShop3.Customers.Models;
-using Interface_OnlineShop3.Products.Service;
-using Interface_OnlineShop3.Products.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using Interface_OnlineShop.Customers.Service;
-using Interface_OnlineShop.OrderDetails.Service;
-using Interface_OnlineShop.Orders.Service;
-using Interface_OnlineShop.Products.Service;
+using Interface_OnlineShop3.Products.Models;
+using Interface_OnlineShop3.Products.Service;
+using Interface_OnlineShop3.Orders.Models;
+using Interface_OnlineShop3.Orders.Service;
+using Interface_OnlineShop3.OrderDetails.Models;
+using Interface_OnlineShop3.OrderDetails.Service;
+using Interface_OnlineShop3.Customers.Models;
+using Interface_OnlineShop3.Customers.Service;
 
-namespace Interface_OnlineShop3
+namespace Interface_OnlineShop3.playground
 {
     public class View
     {
@@ -154,7 +152,7 @@ namespace Interface_OnlineShop3
         public void AfisareDetaliiComenzi()
         {
             List<OrderDetail> detaliiComenzi = _orderDetailsQueryService.GetAllOrderDetails();
-            if(detaliiComenzi == null)
+            if (detaliiComenzi == null)
             {
                 Console.WriteLine("lista este goala");
             }
@@ -209,7 +207,7 @@ namespace Interface_OnlineShop3
         public void AfisareDetaliiComanda()
         {
             List<OrderDetail> detaliiComanda = _orderDetailsQueryService.GetAllOrderDetails();
-            if(detaliiComanda == null)
+            if (detaliiComanda == null)
             {
                 Console.WriteLine("lista este goala");
             }
@@ -231,7 +229,7 @@ namespace Interface_OnlineShop3
             int productId = int.Parse(Console.ReadLine());
 
             Console.WriteLine("Introduceti pretul:");
-            int price = Int32.Parse(Console.ReadLine());
+            int price = int.Parse(Console.ReadLine());
 
             Console.WriteLine("Introduceti cantitatea:");
             int quantity = int.Parse(Console.ReadLine());
@@ -254,7 +252,7 @@ namespace Interface_OnlineShop3
                 detaliuComanda.ProductId = int.Parse(Console.ReadLine());
 
                 Console.WriteLine("Introduceti noul pret:");
-                detaliuComanda.Price = Int32.Parse(Console.ReadLine());
+                detaliuComanda.Price = int.Parse(Console.ReadLine());
 
                 Console.WriteLine("Introduceti noua cantitate:");
                 detaliuComanda.Quantity = int.Parse(Console.ReadLine());
@@ -273,7 +271,7 @@ namespace Interface_OnlineShop3
         {
             List<Customer> clienti = _customerQueryService.GetAllCustomers();
 
-            if(clienti == null)
+            if (clienti == null)
             {
                 Console.WriteLine("Lista este goala");
             }
