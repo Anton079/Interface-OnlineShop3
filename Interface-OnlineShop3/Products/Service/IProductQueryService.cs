@@ -13,5 +13,11 @@ namespace Interface_OnlineShop3.Products.Service
         List<Product> getAll();
 
         Product FindProductById(int id);
+
+        int FindProductIdByName(string name);
+
+        int FindProductStockByName(string name);
+
+        int FindProductPriceByName(string name);
     }
 }

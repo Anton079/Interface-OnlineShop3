@@ -14,6 +14,9 @@ using Interface_OnlineShop3.Customers.Repository;
 using Interface_OnlineShop3.Orders.Service;
 using Interface_OnlineShop3.Customers.Service;
 using Interface_OnlineShop3.playground;
+using Interface_OnlineShop3.System;
+using Interface_OnlineShop3.System.DTOs;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Interface_OnlineShop3
 {
@@ -21,10 +24,10 @@ namespace Interface_OnlineShop3
     {
         public static void Main(string[] args)
         {
-            OrdersRepository ordersRepository = new OrdersRepository();
-            OrderDetailsRepository orderDetailsRepository = new OrderDetailsRepository();
-            CustomerRepository customerRepository = new CustomerRepository();
-            ProductRepository productRepository = new ProductRepository();
+            IOrdersRepository ordersRepository = new OrdersRepository();
+            IOrderDetailsRepository orderDetailsRepository = new OrderDetailsRepository();
+            ICustomerRepository customerRepository = new CustomerRepository();
+            IProductRepository productRepository = new ProductRepository();
 
             OrdersQueryService ordersQueryService = new OrdersQueryService(ordersRepository);
             OrdersCommandService ordersCommandService = new OrdersCommandService(ordersRepository);
@@ -37,13 +40,40 @@ namespace Interface_OnlineShop3
 
             ProductQueryService productQueryService = new ProductQueryService(productRepository); 
             ProductComandService productComandService = new ProductComandService(productRepository);
+            Cos cos = new Cos(productQueryService);
 
-            MainView view = new MainView(ordersCommandService, orderDetailsCommandService, productQueryService,ordersQueryService, orderDetailsQueryService);
-            
+            MainView view = new MainView(cos, ordersCommandService, orderDetailsCommandService, productQueryService, ordersQueryService, orderDetailsQueryService);
+
             view.Play();
 
 
-            
+
+
+
+
+
+
+
+
+
+            //ICos cos = new Cos(productQueryService);
+
+            //OrderDetailsDto product1 = new OrderDetailsDto(1, "Zahar", 5);
+            //OrderDetailsDto product2 = new OrderDetailsDto(2, "Miere", 25);
+            //OrderDetailsDto product3 = new OrderDetailsDto(3, "Napolitana", 35);
+            //OrderDetailsDto product4 = new OrderDetailsDto(4, "Salam", 45);
+
+            //cos.AddCos(product1);
+
+            //cos.EditQuantity("Zahar", 150);
+
+            //cos.RemoveFromCos("Zahar");
+
+            //foreach (OrderDetailsDto x in cos.GetAll())
+            //{
+            //    Console.WriteLine($"{x.ProductId}, {x.ProductName}, {x.Quantity}");
+            //}
+
 
 
 

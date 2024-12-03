@@ -127,6 +127,18 @@ namespace Interface_OnlineShop3.Products.Repository
             return null;
         }
 
+        public Product FindByName(string name)
+        {
+            foreach (Product product in productsList)
+            {
+                if (product.Name == name)
+                {
+                    return product;
+                }
+            }
+            return null;
+        }
+
         public Product UpdateProducts(int id, Product updatedProduct)
         {
             Product existingProduct = FindById(id);

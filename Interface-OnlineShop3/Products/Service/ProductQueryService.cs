@@ -36,5 +36,26 @@ namespace Interface_OnlineShop3.Products.Service
 
             return product;
         }
+
+        public int FindProductIdByName(string nameProduct)
+        {
+            Product product = _prodRepository.FindByName(nameProduct);
+
+            return product.Id;
+        }
+
+        public int FindProductStockByName(string nameProduct)
+        {
+            Product product = _prodRepository.FindByName(nameProduct);
+
+            return product.Stock;
+        }
+
+        public int FindProductPriceByName(string nameProduct)
+        {
+            Product product = _prodRepository.FindByName(nameProduct);
+
+            return product.Price;
+        }
     }
 }

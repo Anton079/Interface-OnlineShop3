@@ -18,6 +18,8 @@ namespace Interface_OnlineShop3.Products.Repository
 
         Product FindById(int id);
 
+        Product FindByName(string name);
+
         Product UpdateProducts(int id, Product update);
     }
 }
