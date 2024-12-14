@@ -30,7 +30,7 @@ namespace Interface_OnlineShop3
             IProductRepository productRepository = new ProductRepository();
 
             OrdersQueryService ordersQueryService = new OrdersQueryService(ordersRepository);
-            OrdersCommandService ordersCommandService = new OrdersCommandService(ordersRepository);
+            OrdersCommandService ordersCommandService = new OrdersCommandService(ordersRepository, orderDetailsRepository, productRepository);
 
             OrderDetailsQueryService orderDetailsQueryService = new OrderDetailsQueryService(orderDetailsRepository);
             OrderDetailsCommandService orderDetailsCommandService = new OrderDetailsCommandService(orderDetailsRepository);
@@ -38,7 +38,7 @@ namespace Interface_OnlineShop3
             CustomerQueryService customerQueryService = new CustomerQueryService(customerRepository);
             CustomerCommandService customerCommandService = new CustomerCommandService(customerRepository);
 
-            ProductQueryService productQueryService = new ProductQueryService(productRepository); 
+            ProductQueryService productQueryService = new ProductQueryService(productRepository);
             ProductComandService productComandService = new ProductComandService(productRepository);
             Cos cos = new Cos(productQueryService);
 

@@ -39,15 +39,22 @@ namespace Interface_OnlineShop3
 
         public void MeniuView()
         {
+            Console.WriteLine("=========================");
+            Console.WriteLine("         MENIU         ");
+            Console.WriteLine("=========================");
             Console.WriteLine("1. Afisare produse");
             Console.WriteLine("2. Afisare cos");
-            Console.WriteLine("3. Adauga produse în cos");
+            Console.WriteLine("3. Adauga produse in cos");
             Console.WriteLine("4. Modifica cantitatea unui produs din cos");
             Console.WriteLine("5. Sterge un produs din cos");
             Console.WriteLine("6. Plasare comanda");
-            Console.WriteLine("7. Iesire");
+            Console.WriteLine("7. Istoricul comenzilor tale");
+            Console.WriteLine("8. Cautare produs");
+            Console.WriteLine("9. Filtrare produse dupa pret");
+            Console.WriteLine("10. Iesire");
+            Console.WriteLine("=========================");
         }
-
+ 
         public void Play()
         {
             bool running = true;
@@ -84,12 +91,24 @@ namespace Interface_OnlineShop3
                         break;
 
                     case "7":
+                        ViewOrderHistory();
+                        break;
+
+                    case "8":
+                        SearchProduct();
+                        break;
+
+                    case "9":
+                        FilterProductsByPrice();
+                        break;
+
+                    case "10":
                         Console.WriteLine("La revedere!");
                         running = false;
                         break;
 
                     default:
-                        Console.WriteLine("Optiune invalida. Încercati din nou.");
+                        Console.WriteLine("Optiune invalida. Incercati din nou.");
                         break;
                 }
 
@@ -97,27 +116,38 @@ namespace Interface_OnlineShop3
             }
         }
 
+
         //afisare produse
         public void AfisareProduse()
         {
+            Console.WriteLine("    PRODUSE DISPONIBILE   ");
+
             List<Product> products = _productQueryService.getAll();
 
             foreach(Product product in products)
             {
-                Console.WriteLine($"{product.Name},{product.Descriptions},{product.Stock}");
+                Console.WriteLine($"Nume: {product.Name} | Descriere: {product.Descriptions} | Stoc: {product.Stock}");
             }
+            Console.WriteLine("=========================");
         }
 
         //Afisare Cos
         public void AfisareCos()
         {
-            Console.WriteLine("IN COS AI:");
+            Console.WriteLine("         COSUL TAU        ");
+            int total = 0;
+
             foreach (OrderDetailsDto x in _cos.GetAll())
             {
-                Console.WriteLine($"Produs ID: {x.ProductId}, Produs nume: {x.ProductName}, Cantitate: {x.Quantity}");
-            }
-            Console.WriteLine(" ");
+                int productPrice = _productQueryService.FindProductPriceByName(x.ProductName);
+                int subtotal = productPrice * x.Quantity;
+                total += subtotal;
 
+                Console.WriteLine($"Produs ID: {x.ProductId}, Produs nume: {x.ProductName}, Cantitate: {x.Quantity}, Pret unitar: {productPrice}, Subtotal: {subtotal}");
+            }
+
+            Console.WriteLine($"Total cos: {total} lei.");
+            Console.WriteLine(" ");
         }
 
         //Adaugare in Cos
@@ -145,6 +175,7 @@ namespace Interface_OnlineShop3
 
             OrderDetailsDto newProduct = new OrderDetailsDto(productId, productName, quantityWanted);
             _cos.AddCos(newProduct);
+            Console.WriteLine("Produsul a fost adaugat cu succes!");
         }
 
         //update
@@ -194,26 +225,23 @@ namespace Interface_OnlineShop3
         //plasare comanda din cos
         public void PlaceOrder()
         {
-            if(_cos.GetAll().Count == 0)
+            if (_cos.GetAll().Count == 0)
             {
                 Console.WriteLine("Cosul este gol, trebuie adaugate produse pentru a plasa comanda!");
                 return;
             }
-    
+
             try
             {
-                foreach(OrderDetailsDto orderDto in _cos.GetAll())
+                // Creeaza o lista temporara pentru a stoca obiectele din cos
+                List<OrderDetailsDto> detailsDtos = _cos.GetAll().ToList();
+
+                foreach (OrderDetailsDto orderDto in _cos.GetAll())
                 {
-                    Order newOrder = new Order(orderDto.ProductId, customer.Id, orderDto.Quantity, customer.BillingAddress);
-                    _ordersCommandService.AddOrders(newOrder);
+                    int customerId = customer.Id;
+                    string customerAddress = customer.BillingAddress;
 
-                    int productPrice = _productQueryService.FindProductPriceByName(orderDto.ProductName);
-                    int idNewGen = _orderDetailsQueryService.GenerateId();
-
-                    OrderDetail newOrderDetail = new OrderDetail(idNewGen, newOrder.Id, orderDto.ProductId, productPrice, orderDto.Quantity);
-                    _orderDetailsCommandService.AddOrderDetails(newOrderDetail);
-
-                    Console.WriteLine($"Comanda cu datele Id OrderDetail:{idNewGen}, Id Order{newOrder.Id}, Id Product:{orderDto.ProductId}, Product Price:{productPrice}, Quantity:{orderDto.Quantity} a fost plasata");
+                    _ordersCommandService.PlaceOrder(detailsDtos, customerId, customerAddress);
                 }
 
                 Console.WriteLine("Cosul a fost golit!");
@@ -225,8 +253,110 @@ namespace Interface_OnlineShop3
                 Console.WriteLine("Comanda nu a fost plasata");
                 Console.WriteLine(ex);
             }
+
+
         }
 
+        //istoric comenzi
+        public void ViewOrderHistory()
+        {
+            List<Order> orders = _ordersQueryService.GetAllOrders();
+            List<OrderDetail> orderDetails = _orderDetailsQueryService.GetAllOrderDetails();
+
+            if (orders == null || orders.Count == 0)
+            {
+                Console.WriteLine("Nu ati comandat nimic pentru a afisa istoricul comenzilor!");
+                return;
+            }
+
+            Console.WriteLine("    PRODUSELE PE CARE LE-AI COMANDAT   ");
+
+            foreach (Order order in orders)
+            {
+                Console.WriteLine();
+                Console.WriteLine($"Comanda cu ID: {order.Id}, cu totalul de: {order.Amount}!");
+
+                // Filtrăm detaliile comenzii pentru această comandă fără expresii lambda
+                List<OrderDetail> detailsForOrder = new List<OrderDetail>();
+                foreach (OrderDetail detail in orderDetails)
+                {
+                    if (detail.OrderId == order.Id)
+                    {
+                        detailsForOrder.Add(detail);
+                    }
+                }
+
+                foreach (OrderDetail detail in detailsForOrder)
+                {
+                    string productName = _productQueryService.FindProductNameById(detail.ProductId);
+                    Console.WriteLine($"Produs ORDER ID:{detail.Id}, PRODUS: {productName}, PRETUL: {detail.Price}, CANTITATEA DE: {detail.Quantity}");
+                }
+            }
+        }
+
+
+        //afiseaza o lista filtrara cu produse dupa name product introdus de tine
+        public void SearchProduct()
+        {
+            Console.WriteLine("Introduceti numele sau un cuvant cheie pentru a cauta un produs: ");
+            string searchTerm = Console.ReadLine().ToLower();
+
+            List<Product> products = _productQueryService.getAll();
+            List<Product> filteredProducts = new List<Product>();
+
+            foreach (Product product in products)
+            {
+                if (product.Name.ToLower().Contains(searchTerm) || product.Descriptions.ToLower().Contains(searchTerm))
+                {
+                    filteredProducts.Add(product);
+                }
+            }
+
+            if (filteredProducts.Count == 0)
+            {
+                Console.WriteLine("Nu s-au gasit produse care sa corespunda cautarii ");
+                return;
+            }
+
+            Console.WriteLine("Produsele gasite: ");
+            foreach (Product product in filteredProducts)
+            {
+                Console.WriteLine("Nume: " + product.Name + " | Descriere: " + product.Descriptions + " | Stoc: " + product.Stock);
+            }
+        }
+
+        //afiseaza o lista filtrara cu price ul de la tine
+        public void FilterProductsByPrice()
+        {
+            Console.WriteLine("Introduceti pretul minim:");
+            int minPrice = int.Parse(Console.ReadLine());
+
+            Console.WriteLine("Introduceti pretul maxim:");
+            int maxPrice = int.Parse(Console.ReadLine());
+
+            List<Product> products = _productQueryService.getAll();
+            List<Product> filteredProducts = new List<Product>();
+
+            foreach (Product product in products)
+            {
+                if (product.Price >= minPrice && product.Price <= maxPrice)
+                {
+                    filteredProducts.Add(product);
+                }
+            }
+
+            if (filteredProducts.Count == 0)
+            {
+                Console.WriteLine("Nu s-au gasit produse in aceasta gama de pret.");
+                return;
+            }
+
+            Console.WriteLine("Produsele in aceasta gama de pret:");
+            foreach (Product product in filteredProducts)
+            {
+                Console.WriteLine("Nume: " + product.Name + " | Pret: " + product.Price + " | Stoc: " + product.Stock);
+            }
+        }
 
     }
 }

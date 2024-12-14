@@ -19,5 +19,7 @@ namespace Interface_OnlineShop3.Products.Service
         int FindProductStockByName(string name);
 
         int FindProductPriceByName(string name);
+
+        public string FindProductNameById(int idProduct);
     }
 }

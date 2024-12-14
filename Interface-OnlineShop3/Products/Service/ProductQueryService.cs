@@ -57,5 +57,19 @@ namespace Interface_OnlineShop3.Products.Service
 
             return product.Price;
         }
+
+        public string FindProductNameById(int idProduct)
+        {
+            if(idProduct != -1)
+            {
+                Product product = _prodRepository.FindById(idProduct);
+                return product.Name;
+            }
+            else
+            {
+                Console.WriteLine("Id ul este gol!");
+            }
+            return null;
+        }
     }
 }

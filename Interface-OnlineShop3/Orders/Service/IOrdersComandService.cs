@@ -1,4 +1,6 @@
 ﻿using Interface_OnlineShop3.Orders.Models;
+using Interface_OnlineShop3.System;
+using Interface_OnlineShop3.System.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +16,8 @@ namespace Interface_OnlineShop3.Orders.Service
         int RemoveOrders(int id);
 
         Order UpdateOrders(int id, Order orders);
+
+        public Order PlaceOrder(List<OrderDetailsDto> detailsDtos, int customerId, string customerAddress);
 
     }
 }
