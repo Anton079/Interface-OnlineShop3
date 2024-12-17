@@ -19,5 +19,9 @@ namespace Interface_OnlineShop3.OrderDetails.Repository
 
         OrderDetail UpdateOrderDetails(int id, OrderDetail orderDetails);
 
+        void SaveData();
+
+        int GenerateId();
+
     }
 }

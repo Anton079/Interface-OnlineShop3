@@ -21,7 +21,7 @@ namespace Interface_OnlineShop3.Orders.Service
         private IOrdersRepository _ordersRepository;
         private IOrderDetailsRepository _orderDetailsRepository;
         private IProductRepository _productRepository;
-     
+        
 
         public OrdersCommandService(IOrdersRepository ordersRepository, IOrderDetailsRepository orderDetailsRepository, IProductRepository productRepository)
         {
@@ -60,37 +60,45 @@ namespace Interface_OnlineShop3.Orders.Service
             return null;
         }
 
-        public Order PlaceOrder(List<OrderDetailsDto> detailsDtos, int customerId, string customerAddress)
+        public int GenerateId()
         {
-            foreach(OrderDetailsDto orderDto in detailsDtos)
+            Random rand = new Random();
+
+            int id = rand.Next(1, 1000000);
+
+            while(_ordersRepository.FindById(id) != null)
             {
-                // Creeaza comanda
-                Order newOrder = new Order(orderDto.ProductId, customerId, 0, customerAddress);
-                _ordersRepository.AddOrder(newOrder);
-
-                // Gaseste produsul dupa nume
-                Product productPrice = _productRepository.FindByName(orderDto.ProductName);
-                if (productPrice == null)
-                {
-                    return null;
-                }
-                int prdPrice = productPrice.Price;
-                int idNewGen = newOrder.Id + 10;
-
-                // Creeaza detaliile comenzii
-                OrderDetail newOrderDetail = new OrderDetail(idNewGen, newOrder.Id, orderDto.ProductId, prdPrice, orderDto.Quantity);
-                _orderDetailsRepository.AddOrderDetail(newOrderDetail);
-
-                // Actualizeaza suma comenzii
-                newOrder.Amount += prdPrice * orderDto.Quantity;
-
-                Console.WriteLine($"Comanda cu datele Id OrderDetail:{idNewGen}, Id Order{newOrder.Id}, Id Product:{orderDto.ProductId}, Product Price:{productPrice}, Quantity:{orderDto.Quantity} a fost plasata");
-
-                // Returnează comanda imediat ce a fost creată
-                return newOrder;
+                id = rand.Next(1, 10000000);
             }
+            return id;
+        }
 
-            return null;// Daca lista este goala, returneaza null
+        public void PlaceOrder(IList<OrderDetailsDto> detailsDtos, int customerId, string customerAddress)
+        {
+            int orderId = _ordersRepository.GenerateId();
+
+            Order order = new Order(orderId, customerId, 0, customerAddress);
+
+            int totalAmount = 0;
+
+            foreach (OrderDetailsDto dto in detailsDtos)
+            {
+                
+                int orderDetailId=_orderDetailsRepository.GenerateId();
+
+                OrderDetail orderDetail = new OrderDetail(orderDetailId, orderId, dto.ProductId, dto.Price, dto.Quantity);
+
+                _orderDetailsRepository.AddOrderDetail(orderDetail);
+
+                totalAmount += dto.Price * dto.Quantity;          
+            }
+  
+
+            order.Amount = totalAmount;
+            _ordersRepository.AddOrder(order);
+            _orderDetailsRepository.SaveData();
+            _ordersRepository.SaveData();
+            _productRepository.SaveData();
         }
 
 

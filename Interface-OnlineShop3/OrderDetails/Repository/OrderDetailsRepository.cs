@@ -45,7 +45,7 @@ namespace Interface_OnlineShop3.OrderDetails.Repository
             return file;
         }
 
-        private void SaveData()
+        public void SaveData()
         {
             try
             {
@@ -134,6 +134,19 @@ namespace Interface_OnlineShop3.OrderDetails.Repository
                 SaveData();
             }
             return orderDetailsUpdate;
+        }
+
+        public int GenerateId()
+        {
+            Random rand = new Random();
+
+            int id = rand.Next(0, 1000000);
+
+            while(FindById(id) != null)
+            {
+                id = rand.Next(0, 100000);
+            }
+            return id;
         }
     }
 }

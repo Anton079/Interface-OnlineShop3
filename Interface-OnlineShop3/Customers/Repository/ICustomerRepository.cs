@@ -19,5 +19,7 @@ namespace Interface_OnlineShop3.Customers.Repository
 
         Customer UpdateCustomer(int id, Customer customer);
 
+        int GenerateId();
+
     }
 }

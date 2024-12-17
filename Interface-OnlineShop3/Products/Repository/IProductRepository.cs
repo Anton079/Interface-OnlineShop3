@@ -21,5 +21,10 @@ namespace Interface_OnlineShop3.Products.Repository
         Product FindByName(string name);
 
         Product UpdateProducts(int id, Product update);
+
+        int GenerateId();
+
+        void SaveData();
+
     }
 }

@@ -17,7 +17,7 @@ namespace Interface_OnlineShop3.Orders.Service
 
         Order UpdateOrders(int id, Order orders);
 
-        public Order PlaceOrder(List<OrderDetailsDto> detailsDtos, int customerId, string customerAddress);
+        void PlaceOrder(IList<OrderDetailsDto> detailsDtos, int customerId, string customerAddress);
 
     }
 }

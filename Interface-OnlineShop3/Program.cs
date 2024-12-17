@@ -53,9 +53,6 @@ namespace Interface_OnlineShop3
 
 
 
-
-
-
             //ICos cos = new Cos(productQueryService);
 
             //OrderDetailsDto product1 = new OrderDetailsDto(1, "Zahar", 5);

@@ -127,5 +127,19 @@ namespace Interface_OnlineShop3.Customers.Repository
             Console.WriteLine("Este null");
             return customerUpdate;
         }
+
+        public int GenerateId()
+        {
+            Random rand = new Random();
+
+            int id = rand.Next(0, 1000000);
+
+            while (FindById(id) != null)
+            {
+                id = rand.Next(0, 100000);
+            }
+            return id;
+        }
+
     }
 }

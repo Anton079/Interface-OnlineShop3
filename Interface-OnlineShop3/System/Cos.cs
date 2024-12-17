@@ -35,15 +35,16 @@ namespace Interface_OnlineShop3.System
             OrderDetailsDto orderDetails =this.FindDetailByProductName(product.Name);
 
             if (orderDetails==null)
-            {              
+            {   
                 this.orderDetailsDtos.Add(detailsDto);
-
-                product.Stock -= detailsDto.Quantity;
             }
             else
             {
-                orderDetails.Quantity += detailsDto.Quantity; 
+                orderDetails.Quantity += detailsDto.Quantity;
+               
             }
+            product.Stock -= detailsDto.Quantity;
+            
 
             return true;
         }
