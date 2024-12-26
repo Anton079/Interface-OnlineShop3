@@ -287,6 +287,8 @@ namespace Interface_OnlineShop3.playground
             Console.WriteLine("Introduceti ID-ul clientului:");
             int id = int.Parse(Console.ReadLine());
 
+            string userName = "UserTest";
+
             Console.WriteLine("Introduceti email-ul clientului:");
             string email = Console.ReadLine();
 
@@ -299,10 +301,12 @@ namespace Interface_OnlineShop3.playground
             Console.WriteLine("Introduceti adresa de facturare:");
             string billingAddress = Console.ReadLine();
 
-            Customer newCustomer = new Customer(id, email, password, fullName, billingAddress);
+            Customer newCustomer = new Customer(id, userName, fullName, email, password, billingAddress);
             _customerCommandService.AddCustomer(newCustomer);
 
-            Console.WriteLine("Clientul a fost adaugat cu succes.");
+
+
+        Console.WriteLine("Clientul a fost adaugat cu succes.");
         }
 
         public void ActualizeazaClient()

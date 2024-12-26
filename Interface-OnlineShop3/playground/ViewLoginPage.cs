@@ -106,6 +106,8 @@ namespace Interface_OnlineShop3.playground
             Console.WriteLine("Introduceti email:");
             string email = Console.ReadLine();
 
+            string userName = "userName";
+
             Console.WriteLine("Introduceti parola:");
             string newPassword = Console.ReadLine();
 
@@ -116,7 +118,7 @@ namespace Interface_OnlineShop3.playground
             string billingAddress = Console.ReadLine();
 
             int newId = _customerQueryService.GetAllCustomers().Count + 1;
-            Customer newCustomer = new Customer(newId, email, newPassword, fullName, billingAddress);
+            Customer newCustomer = new Customer(newId, userName, email, newPassword, fullName, billingAddress);
 
             Customer addedCustomer = _customerCommandService.AddCustomer(newCustomer);
 

@@ -18,17 +18,20 @@ namespace Interface_OnlineShop3
 {
     public class MainView
     {
+        private Customer _customer;
         private IOrdersCommandService _ordersCommandService;
-        private IOrderDetailsCommandService _orderDetailsCommandService;
-        private IProductQueryService _productQueryService;
         private IOrdersQueryService _ordersQueryService;
+
+        private IOrderDetailsCommandService _orderDetailsCommandService;
         private IOrderDetailsQueryService _orderDetailsQueryService;
+
+        private IProductQueryService _productQueryService;
+
         private ICos _cos;
 
-        private Customer customer = new Customer(1, "anton@gmail.com", "raul", "manolache", "Cluj");
-
-        public MainView(ICos cos, IOrdersCommandService ordersCommandService, IOrderDetailsCommandService orderDetailsCommandService, IProductQueryService productQueryService, IOrdersQueryService ordersQueryService, IOrderDetailsQueryService orderDetailsQueryService)
+        public MainView(Customer customer,  ICos cos, IOrdersCommandService ordersCommandService, IOrderDetailsCommandService orderDetailsCommandService, IProductQueryService productQueryService, IOrdersQueryService ordersQueryService, IOrderDetailsQueryService orderDetailsQueryService)
         {
+            _customer = customer;
             _ordersCommandService = ordersCommandService;
             _orderDetailsCommandService = orderDetailsCommandService;
             _productQueryService = productQueryService;
@@ -235,8 +238,8 @@ namespace Interface_OnlineShop3
 
             try
             {
-                int customerId = customer.Id;
-                string customerAddress = customer.BillingAddress;
+                int customerId = _customer.Id;
+                string customerAddress = _customer.BillingAddress;
             
                 _ordersCommandService.PlaceOrder(_cos.GetAll(), customerId, customerAddress);
                 _cos.Clear();

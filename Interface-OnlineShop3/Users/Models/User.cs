@@ -9,7 +9,7 @@ namespace Interface_OnlineShop3.Users.Models
 {
     public class User : Customer
     {
-        public User(int id, string email, string password, string fullName, string billingAddress) : base ( id,  email,  password,  fullName, billingAddress)
+        public User(int id, string fullName, string userName,string email, string password, string billingAddress) : base ( id, userName, fullName, email,  password, billingAddress)
         {
 
         }
@@ -17,8 +17,11 @@ namespace Interface_OnlineShop3.Users.Models
         public User(string proprietati) : base (proprietati)
         {
             string[] token = proprietati.Split(',');
+        }
 
-            
+        public override string ToSave()
+        {
+            return base.ToSave();
         }
 
         //tema
