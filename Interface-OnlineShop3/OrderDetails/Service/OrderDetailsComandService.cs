@@ -1,5 +1,6 @@
 ﻿using Interface_OnlineShop3.OrderDetails.Models;
 using Interface_OnlineShop3.OrderDetails.Repository;
+using Interface_OnlineShop3.Orders.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,31 +20,44 @@ namespace Interface_OnlineShop3.OrderDetails.Service
 
         public OrderDetail AddOrderDetails(OrderDetail orderDetails)
         {
-            if (orderDetails != null && _orderDetailsRepository.FindById(orderDetails.Id) == null)
+            try
             {
                 _orderDetailsRepository.AddOrderDetail(orderDetails);
                 return orderDetails;
+            }catch (NullOrderException ex)
+            {
+                Console.WriteLine(ex.Message);
             }
             return null;
         }
 
         public int RemoveOrderDetails(int id)
         {
-
-            if (id != -1)
+            try
             {
                 _orderDetailsRepository.Remove(id);
                 return id;
+            }catch (OrderNotFoundException ex)
+            {
+                Console.WriteLine(ex.Message);
             }
             return -1;
         }
 
         public OrderDetail UpdateOrderDetails(int id, OrderDetail orderDetails)
         {
-            if (orderDetails != null && _orderDetailsRepository.FindById(id) != null)
+            try
             {
+                if(id  == -1)
+                {
+                    throw new OrderNotFoundException();
+                }
+
                 _orderDetailsRepository.UpdateOrderDetails(id, orderDetails);
                 return orderDetails;
+            }catch (NullOrderException ex)
+            {
+                Console.WriteLine(ex.Message);
             }
             return null;
         }

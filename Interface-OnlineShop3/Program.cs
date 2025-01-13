@@ -50,30 +50,16 @@ namespace Interface_OnlineShop3
             Cos cos = new Cos(productQueryService);
 
 
-            ViewLogin viewLogin = new ViewLogin(productComandService,productRepository,adminQueryService,adminRepository, 
-                customerQueryService,customerRepository, ordersCommandService,  orderDetailsCommandService,productQueryService,
-                ordersQueryService,orderDetailsQueryService,cos);
+            //ViewLogin viewLogin = new ViewLogin(productComandService,productRepository,adminQueryService,adminRepository, 
+            //    customerQueryService,customerRepository, ordersCommandService,  orderDetailsCommandService,productQueryService,
+            //    ordersQueryService,orderDetailsQueryService,cos);
 
-            viewLogin.Play();
+            //viewLogin.Play();
 
 
-            //ICos cos = new Cos(productQueryService);
+          
 
-            //OrderDetailsDto product1 = new OrderDetailsDto(1, "Zahar", 5);
-            //OrderDetailsDto product2 = new OrderDetailsDto(2, "Miere", 25);
-            //OrderDetailsDto product3 = new OrderDetailsDto(3, "Napolitana", 35);
-            //OrderDetailsDto product4 = new OrderDetailsDto(4, "Salam", 45);
-
-            //cos.AddCos(product1);
-
-            //cos.EditQuantity("Zahar", 150);
-
-            //cos.RemoveFromCos("Zahar");
-
-            //foreach (OrderDetailsDto x in cos.GetAll())
-            //{
-            //    Console.WriteLine($"{x.ProductId}, {x.ProductName}, {x.Quantity}");
-            //}
+            ordersCommandService.RemoveOrders(1);
 
 
 

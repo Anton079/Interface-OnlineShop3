@@ -1,5 +1,6 @@
 ﻿using Interface_OnlineShop3.OrderDetails.Models;
 using Interface_OnlineShop3.OrderDetails.Repository;
+using Interface_OnlineShop3.Orders.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,11 +25,13 @@ namespace Interface_OnlineShop3.OrderDetails.Service
 
         public OrderDetail FindOrderDetailsById(int id)
         {
-            if (id != -1)
+            try
             {
                 return _orderDetailsRepository.FindById(id);
+            }catch (OrderNotFoundException ex)
+            {
+                Console.WriteLine(ex.Message);
             }
-
             return null;
         }
 

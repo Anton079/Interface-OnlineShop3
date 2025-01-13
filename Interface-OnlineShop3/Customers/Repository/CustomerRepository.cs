@@ -100,11 +100,14 @@ namespace Interface_OnlineShop3.Customers.Repository
 
         public Customer FindById(int id)
         {
-            foreach (Customer customer in customerList)
+            if(id != -1)
             {
-                if (customer.Id == id)
+                foreach (Customer customer in customerList)
                 {
-                    return customer;
+                    if (customer.Id == id)
+                    {
+                        return customer;
+                    }
                 }
             }
             return null;
@@ -114,17 +117,12 @@ namespace Interface_OnlineShop3.Customers.Repository
         {
             Customer customerUpdate = FindById(id);
 
-            if (customerUpdate != null)
-            {
+            customerUpdate.FullName = customer.FullName;
+            customerUpdate.Password = customer.Password;
+            customerUpdate.FullName = customer.FullName;
+            customerUpdate.BillingAddress = customer.BillingAddress;
 
-                customerUpdate.FullName = customer.FullName;
-                customerUpdate.Password = customer.Password;
-                customerUpdate.FullName = customer.FullName;
-                customerUpdate.BillingAddress = customer.BillingAddress;
-
-                SaveData();
-            }
-            Console.WriteLine("Este null");
+            SaveData();
             return customerUpdate;
         }
 

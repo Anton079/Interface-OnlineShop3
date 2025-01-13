@@ -100,21 +100,28 @@ namespace Interface_OnlineShop3.Admins.Repository
 
         public Admin FindById(int id)
         {
-            return adminList.FirstOrDefault(a => a.Id == id);
+            if(id != -1)
+            {
+                foreach (Admin admin in adminList)
+                {
+                    if (admin.Id == id)
+                    {
+                        return admin;
+                    }
+                }
+            }
+            return null;
         }
 
         public Admin UpdateAdmin(int id, Admin admin)
         {
             Admin adminUpdate = FindById(id);
 
-            if (adminUpdate != null)
-            {
-                adminUpdate.FullName = admin.FullName;
-                adminUpdate.Password = admin.Password;
-                adminUpdate.BillingAddress = admin.BillingAddress;
+            adminUpdate.FullName = admin.FullName;
+            adminUpdate.Password = admin.Password;
+            adminUpdate.BillingAddress = admin.BillingAddress;
 
-                SaveData();
-            }
+            SaveData();
             return adminUpdate;
         }
 

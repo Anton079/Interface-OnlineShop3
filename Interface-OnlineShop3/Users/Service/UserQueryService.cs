@@ -1,4 +1,5 @@
-﻿using Interface_OnlineShop3.Users.Models;
+﻿using Interface_OnlineShop3.Orders.Exceptions;
+using Interface_OnlineShop3.Users.Models;
 using Interface_OnlineShop3.Users.Repository;
 using System;
 using System.Collections.Generic;
@@ -24,9 +25,12 @@ namespace Interface_OnlineShop3.Users.Service
 
         public User FindUserById(int id)
         {
-            if (id != -1)
+            try
             {
                 return _userRepository.FindById(id);
+            }catch (OrderNotFoundException ex)
+            {
+                Console.WriteLine(ex.Message);
             }
             return null;
         }

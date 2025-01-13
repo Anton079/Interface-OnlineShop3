@@ -1,4 +1,5 @@
-﻿using Interface_OnlineShop3.Users.Models;
+﻿using Interface_OnlineShop3.Orders.Exceptions;
+using Interface_OnlineShop3.Users.Models;
 using Interface_OnlineShop3.Users.Repository;
 using Interface_OnlineShop3.Users.Service.Interface_OnlineShop3.Users.Service;
 using System;
@@ -20,30 +21,45 @@ namespace Interface_OnlineShop3.Users.Service
 
         public User AddUser(User user)
         {
-            if (user != null)
+            try
             {
                 _userRepository.AddUser(user);
                 return user;
+            }catch(NullOrderException ex)
+            {
+                Console.WriteLine(ex.Message);
             }
             return null;
         }
 
         public int RemoveUser(int id)
         {
-            if (id != -1)
+            try
             {
                 _userRepository.Remove(id);
                 return id;
+            }
+            catch (OrderNotFoundException ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
             }
             return -1;
         }
 
         public User UpdateUser(int id, User user)
         {
-            if (id != -1 && user != null)
+            try
             {
+                if(id != -1)
+                {
+                    throw new OrderNotFoundException();
+                }
+
                 _userRepository.UpdateUser(id, user);
                 return user;
+            }catch(NullOrderException ex)
+            {
+                Console.WriteLine(ex.Message);
             }
             return null;
         }

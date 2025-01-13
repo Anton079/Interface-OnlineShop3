@@ -1,4 +1,5 @@
-﻿using Interface_OnlineShop3.Users.Models;
+﻿using Interface_OnlineShop3.Products.Models;
+using Interface_OnlineShop3.Users.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -92,33 +93,34 @@ namespace Interface_OnlineShop3.Users.Repository
         {
             User user = FindById(id);
 
-            if (user != null)
-            {
-                userList.Remove(user);
-                SaveData();
-            }
+            userList.Remove(user);
+            SaveData();
             return user;
         }
 
         public User FindById(int id)
         {
-            return userList.FirstOrDefault(u => u.Id == id);
+            foreach (User user in userList)
+            {
+                if (user.Id == id)
+                {
+                    return user;
+                }
+            }
+            return null;
         }
 
         public User UpdateUser(int id, User user)
         {
             User userToUpdate = FindById(id);
 
-            if (userToUpdate != null)
-            {
-                userToUpdate.FullName = user.FullName;
-                userToUpdate.UserName = user.UserName;
-                userToUpdate.Email = user.Email;
-                userToUpdate.Password = user.Password;
-                userToUpdate.BillingAddress = user.BillingAddress;
+            userToUpdate.FullName = user.FullName;
+            userToUpdate.UserName = user.UserName;
+            userToUpdate.Email = user.Email;
+            userToUpdate.Password = user.Password;
+            userToUpdate.BillingAddress = user.BillingAddress;
 
-                SaveData();
-            }
+            SaveData();
             return userToUpdate;
         }
 

@@ -1,7 +1,9 @@
-﻿using Interface_OnlineShop3.Customers.Models;
+﻿using Interface_OnlineShop3.Customers.Exceptions;
+using Interface_OnlineShop3.Customers.Models;
 using Interface_OnlineShop3.Customers.Repository;
 using Interface_OnlineShop3.OrderDetails.Models;
 using Interface_OnlineShop3.OrderDetails.Repository;
+using Interface_OnlineShop3.Orders.Exceptions;
 using Interface_OnlineShop3.Orders.Models;
 using Interface_OnlineShop3.Orders.Repository;
 using Interface_OnlineShop3.Products.Models;
@@ -32,32 +34,56 @@ namespace Interface_OnlineShop3.Orders.Service
 
         public Order AddOrders(Order orders)
         {
-            if (orders != null)
-            {
-                _ordersRepository.AddOrder(orders);
-                return orders;
-            }
-            return null;
+            if (orders == null) throw new ArgumentNullException();
+
+            _ordersRepository.AddOrder(orders);
+            return orders;
+
         }
 
         public int RemoveOrders(int id)
         {
-            if (_ordersRepository.FindById(id) != null)
-            {
-                _ordersRepository.Remove(id);
-                return id;
-            }
-            return -1;
+            if(_ordersRepository.FindById(id) == null) throw new OrderNotFoundException();
+
+            _ordersRepository.Remove(id);
+            return id;
         }
 
         public Order UpdateOrders(int id, Order orders)
         {
-            if (orders != null)
+            if (id != -1) throw new OrderNotFoundException();
+
+            _ordersRepository.UpdateOrders(id, orders);
+            return orders;
+        }
+
+        public void PlaceOrder(IList<OrderDetailsDto> detailsDtos, int customerId, string customerAddress)
+        {
+            int orderId = _ordersRepository.GenerateId();
+            Order order = new Order(orderId, customerId, 0, customerAddress);
+
+            if(customerId == -1) throw new CustomerNotFoundException();
+
+            int totalAmount = 0;
+
+            foreach (OrderDetailsDto dto in detailsDtos)
             {
-                _ordersRepository.UpdateOrders(id, orders);
-                return orders;
+                int orderDetailId = _orderDetailsRepository.GenerateId();
+                OrderDetail orderDetail = new OrderDetail(orderDetailId, orderId, dto.ProductId, dto.Price, dto.Quantity);
+
+                if (orderDetail == null) throw new NullOrderDetailException();
+
+                _orderDetailsRepository.AddOrderDetail(orderDetail);
+                totalAmount += dto.Price * dto.Quantity;
             }
-            return null;
+
+            if (order == null) throw new NullOrderException();
+
+            order.Amount = totalAmount;
+            _ordersRepository.AddOrder(order);
+            _orderDetailsRepository.SaveData();
+            _ordersRepository.SaveData();
+            _productRepository.SaveData();
         }
 
         public int GenerateId()
@@ -73,33 +99,6 @@ namespace Interface_OnlineShop3.Orders.Service
             return id;
         }
 
-        public void PlaceOrder(IList<OrderDetailsDto> detailsDtos, int customerId, string customerAddress)
-        {
-            int orderId = _ordersRepository.GenerateId();
-
-            Order order = new Order(orderId, customerId, 0, customerAddress);
-
-            int totalAmount = 0;
-
-            foreach (OrderDetailsDto dto in detailsDtos)
-            {
-                
-                int orderDetailId=_orderDetailsRepository.GenerateId();
-
-                OrderDetail orderDetail = new OrderDetail(orderDetailId, orderId, dto.ProductId, dto.Price, dto.Quantity);
-
-                _orderDetailsRepository.AddOrderDetail(orderDetail);
-
-                totalAmount += dto.Price * dto.Quantity;          
-            }
-  
-
-            order.Amount = totalAmount;
-            _ordersRepository.AddOrder(order);
-            _orderDetailsRepository.SaveData();
-            _ordersRepository.SaveData();
-            _productRepository.SaveData();
-        }
 
 
     }

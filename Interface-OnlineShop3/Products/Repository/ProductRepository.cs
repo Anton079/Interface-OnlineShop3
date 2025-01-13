@@ -88,40 +88,43 @@ namespace Interface_OnlineShop3.Products.Repository
             return productsList;
         }
 
-        public Product Add(Product products)
+        public Product Add(Product product)
         {
-            Product prod = FindById(products.Id);
+            Product prod = FindById(product.Id);
 
             if (prod == null)
             {
-                productsList.Add(products);
+                productsList.Add(product);
                 SaveData();
             }
 
-            return products;
+            return product;
         }
 
         public Product Remove(int id)
         {
-            Product pro = FindById(id);
-
-            if (pro != null)
+            if(id != -1)
             {
+                Product pro = FindById(id);
+
                 productsList.Remove(pro);
                 SaveData();
                 return pro;
             }
 
-            return null;
+            return null; 
         }
 
         public Product FindById(int id)
         {
-            foreach (Product product in productsList)
+            if(id != -1)
             {
-                if (product.Id == id)
+                foreach (Product product in productsList)
                 {
-                    return product;
+                    if (product.Id == id)
+                    {
+                        return product;
+                    }
                 }
             }
             return null;
@@ -153,6 +156,7 @@ namespace Interface_OnlineShop3.Products.Repository
 
                 SaveData();
             }
+
             return existingProduct;
         }
 

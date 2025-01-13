@@ -1,5 +1,6 @@
 ﻿using Interface_OnlineShop3.Admins.Models;
 using Interface_OnlineShop3.Admins.Repository;
+using Interface_OnlineShop3.Orders.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,30 +20,41 @@ namespace Interface_OnlineShop3.Admins.Service
 
         public Admin AddAdmin(Admin admin)
         {
-            if (admin != null)
+            try
             {
                 _adminRepository.AddAdmin(admin);
                 return admin;
+            }catch (NullOrderException ex)
+            {
+                Console.WriteLine(ex.Message);
             }
             return null;
         }
 
         public int RemoveAdmin(int id)
         {
-            if (id != -1)
+            try
             {
                 _adminRepository.Remove(id);
                 return id;
             }
+            catch (OrderNotFoundException ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
             return -1;
         }
 
+
         public Admin UpdateAdmin(int id, Admin admin)
         {
-            if (id != -1 && admin != null)
+            try
             {
                 _adminRepository.UpdateAdmin(id, admin);
                 return admin;
+            }catch(NullOrderException ex)
+            {
+                Console.WriteLine(ex.Message);
             }
             return null;
         }

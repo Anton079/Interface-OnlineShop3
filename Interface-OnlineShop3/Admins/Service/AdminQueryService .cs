@@ -1,5 +1,6 @@
 ﻿using Interface_OnlineShop3.Admins.Models;
 using Interface_OnlineShop3.Admins.Repository;
+using Interface_OnlineShop3.Orders.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,9 +25,12 @@ namespace Interface_OnlineShop3.Admins.Service
 
         public Admin FindAdminById(int id)
         {
-            if (id != -1)
+            try
             {
                 return _adminRepository.FindById(id);
+            }catch (NullOrderException ex)
+            {
+                Console.WriteLine(ex.Message);
             }
             return null;
         }

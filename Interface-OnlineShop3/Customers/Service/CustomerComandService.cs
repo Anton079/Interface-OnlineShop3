@@ -1,5 +1,6 @@
 ﻿using Interface_OnlineShop3.Customers.Models;
 using Interface_OnlineShop3.Customers.Repository;
+using Interface_OnlineShop3.Orders.Exceptions;
 using Interface_OnlineShop3.Products.Models;
 using System;
 using System.Collections.Generic;
@@ -20,30 +21,45 @@ namespace Interface_OnlineShop3.Customers.Service
 
         public Customer AddCustomer(Customer customer)
         {
-            if (customer != null)
+            try
             {
                 _customerRepository.AddCustomer(customer);
                 return customer;
+            }catch (NullOrderException ex)
+            {
+                Console.WriteLine(ex.Message);
             }
             return null;
         }
 
         public int RemoveCustomer(int id)
         {
-            if (id != null)
+            try
             {
                 _customerRepository.Remove(id);
                 return id;
+            }catch(OrderNotFoundException ex)
+            {
+                Console.WriteLine(ex.Message);
             }
             return -1;
         }
 
         public Customer UpdateCustomer(int id, Customer customer)
         {
-            if (id != -1 && customer != null)
+            try
             {
+                if (id == null)
+                {
+                    throw new OrderNotFoundException();
+                }
+
                 _customerRepository.UpdateCustomer(id, customer);
                 return customer;
+
+            }catch (NullOrderException ex)
+            {
+                Console.WriteLine(ex.Message);
             }
             return null;
         }

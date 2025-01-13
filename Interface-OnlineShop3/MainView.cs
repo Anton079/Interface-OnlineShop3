@@ -1,6 +1,8 @@
-﻿using Interface_OnlineShop3.Customers.Models;
+﻿using Interface_OnlineShop3.Customers.Exceptions;
+using Interface_OnlineShop3.Customers.Models;
 using Interface_OnlineShop3.OrderDetails.Models;
 using Interface_OnlineShop3.OrderDetails.Service;
+using Interface_OnlineShop3.Orders.Exceptions;
 using Interface_OnlineShop3.Orders.Models;
 using Interface_OnlineShop3.Orders.Repository;
 using Interface_OnlineShop3.Orders.Service;
@@ -244,10 +246,17 @@ namespace Interface_OnlineShop3
                 _ordersCommandService.PlaceOrder(_cos.GetAll(), customerId, customerAddress);
                 _cos.Clear();
             }
-            catch (Exception ex)
+            catch (NullOrderException ex)
             {
-                Console.WriteLine("Comanda nu a fost plasata");
-                Console.WriteLine(ex);
+                Console.WriteLine(ex.Message);
+            }
+            catch (NullOrderDetailException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            catch(CustomerNotFoundException ex)
+            {
+                Console.WriteLine(ex.Message);
             }
 
 

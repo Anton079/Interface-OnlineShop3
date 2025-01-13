@@ -1,4 +1,5 @@
-﻿using Interface_OnlineShop3.Products.Models;
+﻿using Interface_OnlineShop3.Orders.Exceptions;
+using Interface_OnlineShop3.Products.Models;
 using Interface_OnlineShop3.Products.Repository;
 using System;
 using System.Collections.Generic;
@@ -32,30 +33,58 @@ namespace Interface_OnlineShop3.Products.Service
 
         public Product FindProductById(int id)
         {
-            Product product = _prodRepository.FindById(id);
+            try
+            {
+                Product product = _prodRepository.FindById(id);
 
-            return product;
+                return product;
+            }catch (OrderNotFoundException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return null;
         }
 
         public int FindProductIdByName(string nameProduct)
         {
-            Product product = _prodRepository.FindByName(nameProduct);
+            try
+            {
+                Product product = _prodRepository.FindByName(nameProduct);
+                return product.Id;
+            }catch (OrderNotFoundException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
-            return product.Id;
+            return -1;
         }
 
         public int FindProductStockByName(string nameProduct)
         {
-            Product product = _prodRepository.FindByName(nameProduct);
+            try
+            {
+                Product product = _prodRepository.FindByName(nameProduct);
 
-            return product.Stock;
+                return product.Stock;
+            }catch(OrderNotFoundException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return -1;
         }
 
         public int FindProductPriceByName(string nameProduct)
         {
-            Product product = _prodRepository.FindByName(nameProduct);
+            try
+            {
+                Product product = _prodRepository.FindByName(nameProduct);
 
-            return product.Price;
+                return product.Price;
+            }catch(OrderNotFoundException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return -1;
         }
 
         public string FindProductNameById(int idProduct)

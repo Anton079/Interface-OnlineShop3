@@ -11,6 +11,7 @@ namespace Interface_OnlineShop3.Orders.Service
 {
     public interface IOrdersCommandService
     {
+
         Order AddOrders(Order orders);
 
         int RemoveOrders(int id);

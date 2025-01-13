@@ -1,5 +1,6 @@
 ﻿using Interface_OnlineShop3.Customers.Models;
 using Interface_OnlineShop3.Customers.Repository;
+using Interface_OnlineShop3.Orders.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,9 +25,13 @@ namespace Interface_OnlineShop3.Customers.Service
 
         public Customer FindCustomerById(int id)
         {
-            if (id != -1)
+            try
             {
                 return _customerRepository.FindById(id);
+
+            }catch (OrderNotFoundException ex)
+            {
+                Console.WriteLine(ex.Message);
             }
             return null;
         }

@@ -84,39 +84,30 @@ namespace Interface_OnlineShop3.Orders.Repository
 
         public Order AddOrder(Order orders)
         {
-            if (orders != null)
-            {
-                ordersList.Add(orders);
-                SaveData();
-                return orders;
-            }
-
-            return null;
+            ordersList.Add(orders);
+            SaveData();
+            return orders;
         }
 
         public Order Remove(int id)
         {
-            foreach (Order x in ordersList)
-            {
-                Order order = FindById(id);
+            Order order = FindById(id);
 
-                if (x.Id == order.Id)
-                {
-                    ordersList.Remove(order);
-                    SaveData();
-                    return order;
-                }
-            }
-            return null;
+            ordersList.Remove(order);
+            SaveData();
+            return order;
         }
 
         public Order FindById(int id)
         {
-            foreach (Order orders in ordersList)
+            if(id != -1)
             {
-                if (orders.Id == id)
+                foreach (Order orders in ordersList)
                 {
-                    return orders;
+                    if (orders.Id == id)
+                    {
+                        return orders;
+                    }
                 }
             }
             return null;
@@ -126,16 +117,12 @@ namespace Interface_OnlineShop3.Orders.Repository
         {
             Order ordersUpdate = FindById(id);
 
-            if (ordersUpdate != null)
-            {
-                ordersUpdate.CustomerId = orders.CustomerId;
-                ordersUpdate.Amount = orders.Amount;
-                ordersUpdate.ShippingAddress = orders.ShippingAddress;
+            ordersUpdate.CustomerId = orders.CustomerId;
+            ordersUpdate.Amount = orders.Amount;
+            ordersUpdate.ShippingAddress = orders.ShippingAddress;
 
-                SaveData();
-                return ordersUpdate;
-            }
-            return null;
+            SaveData();
+            return ordersUpdate;
         }
 
         public int GenerateId()
