@@ -1,6 +1,7 @@
 ﻿using Interface_OnlineShop3.Customers.Exceptions;
 using Interface_OnlineShop3.Customers.Models;
 using Interface_OnlineShop3.Customers.Repository;
+using Interface_OnlineShop3.OrderDetails.Exceptions;
 using Interface_OnlineShop3.OrderDetails.Models;
 using Interface_OnlineShop3.OrderDetails.Repository;
 using Interface_OnlineShop3.Orders.Exceptions;
@@ -34,7 +35,7 @@ namespace Interface_OnlineShop3.Orders.Service
 
         public Order AddOrders(Order orders)
         {
-            if (orders == null) throw new ArgumentNullException();
+            if (orders == null) throw new NullOrderException();
 
             _ordersRepository.AddOrder(orders);
             return orders;

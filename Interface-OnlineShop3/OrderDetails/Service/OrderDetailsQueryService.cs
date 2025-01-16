@@ -1,4 +1,5 @@
-﻿using Interface_OnlineShop3.OrderDetails.Models;
+﻿using Interface_OnlineShop3.OrderDetails.Exceptions;
+using Interface_OnlineShop3.OrderDetails.Models;
 using Interface_OnlineShop3.OrderDetails.Repository;
 using Interface_OnlineShop3.Orders.Exceptions;
 using System;
@@ -25,15 +26,18 @@ namespace Interface_OnlineShop3.OrderDetails.Service
 
         public OrderDetail FindOrderDetailsById(int id)
         {
-            try
+            OrderDetail orderDetails = _orderDetailsRepository.FindById(id);
+
+            if (orderDetails != null)
             {
-                return _orderDetailsRepository.FindById(id);
-            }catch (OrderNotFoundException ex)
-            {
-                Console.WriteLine(ex.Message);
+                return orderDetails; 
             }
-            return null;
+            else
+            {
+                throw new OrderDetailsNotFoundException();
+            }
         }
+
 
         public int GenerateId()
         {

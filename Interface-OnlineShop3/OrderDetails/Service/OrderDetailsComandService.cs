@@ -1,4 +1,5 @@
-﻿using Interface_OnlineShop3.OrderDetails.Models;
+﻿using Interface_OnlineShop3.OrderDetails.Exceptions;
+using Interface_OnlineShop3.OrderDetails.Models;
 using Interface_OnlineShop3.OrderDetails.Repository;
 using Interface_OnlineShop3.Orders.Exceptions;
 using System;
@@ -20,46 +21,37 @@ namespace Interface_OnlineShop3.OrderDetails.Service
 
         public OrderDetail AddOrderDetails(OrderDetail orderDetails)
         {
-            try
+            if(_orderDetailsRepository.AddOrderDetail(orderDetails) != null)
             {
-                _orderDetailsRepository.AddOrderDetail(orderDetails);
                 return orderDetails;
-            }catch (NullOrderException ex)
-            {
-                Console.WriteLine(ex.Message);
             }
-            return null;
+            else
+            {
+                throw new OrderDetailsNotFoundException();
+            }
         }
 
         public int RemoveOrderDetails(int id)
         {
-            try
+            if(_orderDetailsRepository.Remove(id) != null)
             {
-                _orderDetailsRepository.Remove(id);
                 return id;
-            }catch (OrderNotFoundException ex)
-            {
-                Console.WriteLine(ex.Message);
             }
-            return -1;
+            else
+            {
+                throw new OrderDetailsNotFoundException();
+            }
         }
 
         public OrderDetail UpdateOrderDetails(int id, OrderDetail orderDetails)
         {
-            try
+            if (id == -1)
             {
-                if(id  == -1)
-                {
-                    throw new OrderNotFoundException();
-                }
-
-                _orderDetailsRepository.UpdateOrderDetails(id, orderDetails);
-                return orderDetails;
-            }catch (NullOrderException ex)
-            {
-                Console.WriteLine(ex.Message);
+                throw new OrderNotFoundException();
             }
-            return null;
+
+            _orderDetailsRepository.UpdateOrderDetails(id, orderDetails);
+            return orderDetails;
         }
     }
 }

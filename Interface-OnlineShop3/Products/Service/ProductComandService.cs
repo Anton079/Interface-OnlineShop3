@@ -1,4 +1,5 @@
 ﻿using Interface_OnlineShop3.Orders.Exceptions;
+using Interface_OnlineShop3.Products.Exceptions;
 using Interface_OnlineShop3.Products.Models;
 using Interface_OnlineShop3.Products.Repository;
 using System;
@@ -20,43 +21,38 @@ namespace Interface_OnlineShop3.Products.Service
 
         public int RemoveProduct(int id)
         {
-            try
+            if (_productRepository.Remove(id) != null)
             {
-                _productRepository.Remove(id);
                 return id;
             }
-            catch (OrderNotFoundException ex)
+            else
             {
-                Console.WriteLine($"Error: {ex.Message}");
+                throw new ProductNotFoundException();
             }
-            return -1;
         }
 
         public Product AddProduct(Product productAdd)
         {
-            try
+            if (_productRepository.Add(productAdd) != null)
             {
-                _productRepository.Add(productAdd);
-                return productAdd;
-            }catch (NullOrderException ex)
-            {
-                Console.WriteLine(ex.Message);
+                 return productAdd;
             }
-            return null;
+            else
+            {
+                throw new NullProductException();
+            }
         }
 
         public Product UpdateProduct(int id, Product newProduct)
         {
-            try
+            if(_productRepository.Add(newProduct) != null)
             {
-                _productRepository.Add(newProduct);
                 return newProduct;
             }
-            catch (NullOrderException ex)
+            else
             {
-                Console.WriteLine(ex.Message);
+                throw new NullOrderException();
             }
-            return null;
         }
     }
 }

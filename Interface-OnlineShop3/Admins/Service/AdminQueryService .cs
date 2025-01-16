@@ -1,4 +1,5 @@
-﻿using Interface_OnlineShop3.Admins.Models;
+﻿using Interface_OnlineShop3.Admins.Extensions;
+using Interface_OnlineShop3.Admins.Models;
 using Interface_OnlineShop3.Admins.Repository;
 using Interface_OnlineShop3.Orders.Exceptions;
 using System;
@@ -25,14 +26,16 @@ namespace Interface_OnlineShop3.Admins.Service
 
         public Admin FindAdminById(int id)
         {
-            try
+            Admin ad = _adminRepository.FindById(id);
+
+            if(ad != null)
             {
-                return _adminRepository.FindById(id);
-            }catch (NullOrderException ex)
-            {
-                Console.WriteLine(ex.Message);
+                return ad;
             }
-            return null;
+            else
+            {
+                throw new AdminNotFoundException(); 
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Interface_OnlineShop3.Orders.Models;
+﻿using Interface_OnlineShop3.Orders.Exceptions;
+using Interface_OnlineShop3.Orders.Models;
 using Interface_OnlineShop3.Orders.Repository;
 using System;
 using System.Collections.Generic;
@@ -29,13 +30,15 @@ namespace Interface_OnlineShop3.Orders.Service
 
         public Order FindOrdersById(int id)
         {
-            if (id != 0)
+            Order order = _ordersRepository.FindById(id);
+            if (order != null)
             {
-                Order order = _ordersRepository.FindById(id);
                 return order;
             }
-
-            return null;
+            else
+            {
+                throw new OrderNotFoundException();
+            }
         }
 
         public int GenerateId()

@@ -1,4 +1,5 @@
-﻿using Interface_OnlineShop3.Admins.Models;
+﻿using Interface_OnlineShop3.Admins.Extensions;
+using Interface_OnlineShop3.Admins.Models;
 using Interface_OnlineShop3.Admins.Repository;
 using Interface_OnlineShop3.Orders.Exceptions;
 using System;
@@ -33,30 +34,27 @@ namespace Interface_OnlineShop3.Admins.Service
 
         public int RemoveAdmin(int id)
         {
-            try
+            if(_adminRepository.Remove(id) != null)
             {
-                _adminRepository.Remove(id);
                 return id;
             }
-            catch (OrderNotFoundException ex)
+            else
             {
-                Console.WriteLine($"Error: {ex.Message}");
+                throw new AdminNotFoundException();
             }
-            return -1;
         }
 
 
         public Admin UpdateAdmin(int id, Admin admin)
         {
-            try
+            if (_adminRepository.UpdateAdmin(id, admin) != null)
             {
-                _adminRepository.UpdateAdmin(id, admin);
                 return admin;
-            }catch(NullOrderException ex)
-            {
-                Console.WriteLine(ex.Message);
             }
-            return null;
+            else
+            {
+                throw new NullAdminException();
+            }
         }
     }
 }

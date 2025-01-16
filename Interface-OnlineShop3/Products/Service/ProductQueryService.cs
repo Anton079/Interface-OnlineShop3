@@ -1,4 +1,5 @@
 ﻿using Interface_OnlineShop3.Orders.Exceptions;
+using Interface_OnlineShop3.Products.Exceptions;
 using Interface_OnlineShop3.Products.Models;
 using Interface_OnlineShop3.Products.Repository;
 using System;
@@ -33,72 +34,68 @@ namespace Interface_OnlineShop3.Products.Service
 
         public Product FindProductById(int id)
         {
-            try
-            {
-                Product product = _prodRepository.FindById(id);
+            Product product = _prodRepository.FindById(id);
 
-                return product;
-            }catch (OrderNotFoundException ex)
+            if (product != null)
             {
-                Console.WriteLine(ex.Message);
+                return product;
             }
-            return null;
+            else
+            {
+                throw new ProductNotFoundException();
+            }
         }
 
         public int FindProductIdByName(string nameProduct)
         {
-            try
+            Product product = _prodRepository.FindByName(nameProduct);
+            if(product != null)
             {
-                Product product = _prodRepository.FindByName(nameProduct);
                 return product.Id;
-            }catch (OrderNotFoundException ex)
+            }else
             {
-                Console.WriteLine(ex.Message);
+                throw new ProductNotFoundException();
             }
-
-            return -1;
         }
 
         public int FindProductStockByName(string nameProduct)
         {
-            try
+            Product product = _prodRepository.FindByName(nameProduct);
+            if (product != null)
             {
-                Product product = _prodRepository.FindByName(nameProduct);
-
                 return product.Stock;
-            }catch(OrderNotFoundException ex)
-            {
-                Console.WriteLine(ex.Message);
             }
-            return -1;
+            else
+            {
+                throw new ProductNotFoundException();
+            }
         }
 
         public int FindProductPriceByName(string nameProduct)
         {
-            try
+            Product product = _prodRepository.FindByName(nameProduct);
+            if (product != null)
             {
-                Product product = _prodRepository.FindByName(nameProduct);
-
                 return product.Price;
-            }catch(OrderNotFoundException ex)
-            {
-                Console.WriteLine(ex.Message);
             }
-            return -1;
+            else
+            {
+                throw new ProductNotFoundException();
+            }
         }
 
         public string FindProductNameById(int idProduct)
         {
-            if(idProduct != -1)
+            Product product = _prodRepository.FindById(idProduct);
+
+            if (product != null)
             {
-                Product product = _prodRepository.FindById(idProduct);
                 return product.Name;
             }
             else
             {
-                Console.WriteLine("Id ul este gol!");
+                throw new ProductNotFoundException();
             }
-            return null;
         }
     }
 }

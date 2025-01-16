@@ -1,15 +1,18 @@
 ﻿using Interface_OnlineShop3.Customers.Exceptions;
 using Interface_OnlineShop3.Customers.Models;
+using Interface_OnlineShop3.OrderDetails.Exceptions;
 using Interface_OnlineShop3.OrderDetails.Models;
 using Interface_OnlineShop3.OrderDetails.Service;
 using Interface_OnlineShop3.Orders.Exceptions;
 using Interface_OnlineShop3.Orders.Models;
 using Interface_OnlineShop3.Orders.Repository;
 using Interface_OnlineShop3.Orders.Service;
+using Interface_OnlineShop3.Products.Exceptions;
 using Interface_OnlineShop3.Products.Models;
 using Interface_OnlineShop3.Products.Service;
 using Interface_OnlineShop3.System;
 using Interface_OnlineShop3.System.DTOs;
+using Interface_OnlineShop3.System.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -215,18 +218,26 @@ namespace Interface_OnlineShop3
         // Ștergere produs din coș
         public void RemoveFromCos()
         {
-            Console.WriteLine("Introduceți numele produsului pe care doriți să Il StergeTi din cos:");
+            Console.WriteLine("Introduceți numele produsului pe care doriți să îl ștergeți din coș:");
             string productName = Console.ReadLine();
 
-            bool removed = _cos.RemoveFromCos(productName);
-            if (removed)
+            try
             {
-                Console.WriteLine("Produsul a fost șters din coș!");
+                bool removed = _cos.RemoveFromCos(productName);
+                if (removed)
+                {
+                    Console.WriteLine("Produsul a fost șters din coș!");
+                }
+                else
+                {
+                    //throw new RemoveFromCosException($"Produsul '{productName}' nu a fost gasit în cos!");
+                }
             }
-            else
+            catch (RemoveFromCosException ex)
             {
-                Console.WriteLine("Produsul nu a fost găsit în coș!");
+                Console.WriteLine(ex.Message);
             }
+
         }
 
         //plasare comanda din cos
@@ -265,83 +276,97 @@ namespace Interface_OnlineShop3
         //istoric comenzi
         public void ViewOrderHistory()
         {
-            List<Order> orders = _ordersQueryService.GetAllOrders();
-            List<OrderDetail> orderDetails = _orderDetailsQueryService.GetAllOrderDetails();
-
-            if (orders == null || orders.Count == 0)
+            try
             {
-                Console.WriteLine("Nu ati comandat nimic pentru a afisa istoricul comenzilor!");
-                return;
-            }
+                List<Order> orders = _ordersQueryService.GetAllOrders();
+                List<OrderDetail> orderDetails = _orderDetailsQueryService.GetAllOrderDetails();
 
-            Console.WriteLine("    PRODUSELE PE CARE LE-AI COMANDAT   ");
+                if (orders == null || orders.Count == 0)
+                {
+                    Console.WriteLine("Nu ati comandat nimic pentru a afisa istoricul comenzilor!");
+                    return;
+                }
 
-            // Afișăm comenzile disponibile
-            foreach (Order order in orders)
-            {
+                Console.WriteLine("    PRODUSELE PE CARE LE-AI COMANDAT   ");
+
+                // Afișăm comenzile disponibile
+                foreach (Order order in orders)
+                {
+                    Console.WriteLine();
+                    Console.WriteLine($"Comanda cu ID: {order.Id}, cu totalul de: {order.Amount}!");
+                    foreach (OrderDetail detail in orderDetails)
+                    {
+                        if (detail.OrderId == order.Id)
+                        {
+                            string productName = _productQueryService.FindProductNameById(detail.ProductId);
+                            Console.Write($"{productName}, ");
+                        }
+                    }
+                }
+
                 Console.WriteLine();
-                Console.WriteLine($"Comanda cu ID: {order.Id}, cu totalul de: {order.Amount}!");
+                Console.WriteLine("Introduceti ID-ul comenzii pentru a vedea mai multe detalii sau apasati 0 pentru a iesi: ");
+
+                // Solicităm utilizatorului un ID de comandă
+                string input = Console.ReadLine();
+                int selectedOrderId = 0;
+
+                try
+                {
+                    selectedOrderId = int.Parse(input);
+                }
+                catch (FormatException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return;
+                }
+
+                if (selectedOrderId == 0)
+                {
+                    Console.WriteLine("Iesire din istoricul comenzilor.");
+                    return;
+                }
+
+                // Găsim comanda cu ID-ul introdus
+                Order selectedOrder = null;
+                foreach (Order order in orders)
+                {
+                    if (order.Id == selectedOrderId)
+                    {
+                        selectedOrder = order;
+                        break;
+                    }
+                }
+
+                if (selectedOrder == null)
+                {
+                    Console.WriteLine("ID-ul comenzii introdus nu exista!");
+                    return;
+                }
+
+                Console.WriteLine();
+                Console.WriteLine($"Detalii pentru comanda cu ID: {selectedOrder.Id}, cu totalul de: {selectedOrder.Amount}!");
+
+                // Afișăm detaliile comenzii selectate
                 foreach (OrderDetail detail in orderDetails)
                 {
-                    if (detail.OrderId == order.Id)
+                    if (detail.OrderId == selectedOrder.Id)
                     {
                         string productName = _productQueryService.FindProductNameById(detail.ProductId);
-                        Console.Write($"{productName}, ");
+                        Console.WriteLine($"Produs ORDER ID: {detail.Id}, PRODUS: {productName}, PRETUL: {detail.Price}, CANTITATEA DE: {detail.Quantity}");
                     }
                 }
             }
-
-            Console.WriteLine();
-            Console.WriteLine("Introduceti ID-ul comenzii pentru a vedea mai multe detalii sau apasati 0 pentru a iesi: ");
-
-            // Solicităm utilizatorului un ID de comandă
-            string input = Console.ReadLine();
-            int selectedOrderId = 0;
-
-            try
+            catch(OrderNotFoundException ex)
             {
-                selectedOrderId = int.Parse(input);
+                Console.WriteLine(ex.Message);
+            }catch(OrderDetailsNotFoundException ex)
+            {
+                Console.WriteLine(ex.Message);
             }
-            catch
+            catch (ProductNotFoundException ex)
             {
-                Console.WriteLine("Optiune invalida! Introduceti un ID numeric valid.");
-                return;
-            }
-
-            if (selectedOrderId == 0)
-            {
-                Console.WriteLine("Iesire din istoricul comenzilor.");
-                return;
-            }
-
-            // Găsim comanda cu ID-ul introdus
-            Order selectedOrder = null;
-            foreach (Order order in orders)
-            {
-                if (order.Id == selectedOrderId)
-                {
-                    selectedOrder = order;
-                    break;
-                }
-            }
-
-            if (selectedOrder == null)
-            {
-                Console.WriteLine("ID-ul comenzii introdus nu exista!");
-                return;
-            }
-
-            Console.WriteLine();
-            Console.WriteLine($"Detalii pentru comanda cu ID: {selectedOrder.Id}, cu totalul de: {selectedOrder.Amount}!");
-
-            // Afișăm detaliile comenzii selectate
-            foreach (OrderDetail detail in orderDetails)
-            {
-                if (detail.OrderId == selectedOrder.Id)
-                {
-                    string productName = _productQueryService.FindProductNameById(detail.ProductId);
-                    Console.WriteLine($"Produs ORDER ID: {detail.Id}, PRODUS: {productName}, PRETUL: {detail.Price}, CANTITATEA DE: {detail.Quantity}");
-                }
+                Console.WriteLine(ex.Message);
             }
         }
 

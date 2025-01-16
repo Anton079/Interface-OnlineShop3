@@ -18,5 +18,18 @@ namespace Interface_OnlineShop3.System
 
         //Customer
         public static readonly string CustomerNotFoundException = "Customer nu a fost gasit";
+        public static readonly string NullCustomerException = "Cutomser nu poate fi null";
+
+        //Products
+        public static readonly string ProductWithoutStockException = "Cantitatea dorita este mai mare decat stockul!";
+        public static readonly string ProductNotFoundException = "Produsul nu a fost gasit";
+        public static readonly string NullProductException = "Product nu poate fi null";
+
+        //Cos
+        public static readonly string RemoveFromCosException = "Nu s-a putut da remove!";
+
+        //admin
+        public static readonly string AdminNotFoundException = "Admin nu a fost gasit";
+        public static readonly string NullAdminException = "Admin nu poate fi null";
     }
 }

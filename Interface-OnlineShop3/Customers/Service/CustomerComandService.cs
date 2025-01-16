@@ -1,4 +1,5 @@
-﻿using Interface_OnlineShop3.Customers.Models;
+﻿using Interface_OnlineShop3.Customers.Exceptions;
+using Interface_OnlineShop3.Customers.Models;
 using Interface_OnlineShop3.Customers.Repository;
 using Interface_OnlineShop3.Orders.Exceptions;
 using Interface_OnlineShop3.Products.Models;
@@ -21,47 +22,37 @@ namespace Interface_OnlineShop3.Customers.Service
 
         public Customer AddCustomer(Customer customer)
         {
-            try
+            if (_customerRepository.AddCustomer(customer) != null)
             {
-                _customerRepository.AddCustomer(customer);
                 return customer;
-            }catch (NullOrderException ex)
-            {
-                Console.WriteLine(ex.Message);
             }
-            return null;
+            else
+            {
+                throw new NullCustomerException();
+            }
         }
 
         public int RemoveCustomer(int id)
         {
-            try
-            {
-                _customerRepository.Remove(id);
+            if(_customerRepository.Remove(id)!= null)
+            { 
                 return id;
-            }catch(OrderNotFoundException ex)
-            {
-                Console.WriteLine(ex.Message);
             }
-            return -1;
+            else
+            {
+                throw new CustomerNotFoundException();
+            }
         }
 
         public Customer UpdateCustomer(int id, Customer customer)
         {
-            try
+            if (id == null)
             {
-                if (id == null)
-                {
-                    throw new OrderNotFoundException();
-                }
-
-                _customerRepository.UpdateCustomer(id, customer);
-                return customer;
-
-            }catch (NullOrderException ex)
-            {
-                Console.WriteLine(ex.Message);
+                throw new OrderNotFoundException();
             }
-            return null;
+
+            _customerRepository.UpdateCustomer(id, customer);
+            return customer;
         }
 
 

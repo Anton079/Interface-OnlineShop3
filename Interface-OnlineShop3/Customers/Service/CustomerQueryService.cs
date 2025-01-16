@@ -1,4 +1,5 @@
-﻿using Interface_OnlineShop3.Customers.Models;
+﻿using Interface_OnlineShop3.Customers.Exceptions;
+using Interface_OnlineShop3.Customers.Models;
 using Interface_OnlineShop3.Customers.Repository;
 using Interface_OnlineShop3.Orders.Exceptions;
 using System;
@@ -25,15 +26,17 @@ namespace Interface_OnlineShop3.Customers.Service
 
         public Customer FindCustomerById(int id)
         {
-            try
-            {
-                return _customerRepository.FindById(id);
+            Customer customer = _customerRepository.FindById(id); 
 
-            }catch (OrderNotFoundException ex)
+            if (customer != null)
             {
-                Console.WriteLine(ex.Message);
+                return customer;
             }
-            return null;
+            else
+            {
+                throw new CustomerNotFoundException();
+            }
         }
+
     }
 }
