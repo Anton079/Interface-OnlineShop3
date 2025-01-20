@@ -24,12 +24,18 @@ namespace Interface_OnlineShop3.System
         public static readonly string ProductWithoutStockException = "Cantitatea dorita este mai mare decat stockul!";
         public static readonly string ProductNotFoundException = "Produsul nu a fost gasit";
         public static readonly string NullProductException = "Product nu poate fi null";
+        public static readonly string QuantityProductNotFoundException = "Quantity nu este suficient!";
 
         //Cos
-        public static readonly string RemoveFromCosException = "Nu s-a putut da remove!";
+        public static readonly string RemoveFromCosException = "Nu s-a putut da remove la cos!";
+        public static readonly string OrderDetatilsDtoNotFound = "OrderDeatilsDto nu a fost gasit!";
 
         //admin
         public static readonly string AdminNotFoundException = "Admin nu a fost gasit";
         public static readonly string NullAdminException = "Admin nu poate fi null";
+
+        //User
+        public static readonly string NullUserException = "Userul nu poate fi null";
+        public static readonly string UserNotFoundException = "Userul nu a fost gasit";
     }
 }

@@ -21,5 +21,9 @@ namespace Interface_OnlineShop3.Products.Service
         int FindProductPriceByName(string name);
 
         public string FindProductNameById(int idProduct);
+
+        List<Product> FindProductsByName(string searchTerm);
+
+        List<Product> FindMinAndMaxProductsPrice(int minPrice, int maxPrice);
     }
 }

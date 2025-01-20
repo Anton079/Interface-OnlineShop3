@@ -14,9 +14,9 @@ namespace Interface_OnlineShop3.System
         
         IList<OrderDetailsDto> GetAll();
 
-        bool RemoveFromCos(string productName);
+        void RemoveFromCos(string productName);
 
-        bool EditQuantity(string productName, int newQuantity);
+        void EditQuantity(string productName, int newQuantity);
 
         void Clear();
     }

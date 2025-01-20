@@ -72,13 +72,9 @@ namespace Interface_OnlineShop3.Orders.Service
                 int orderDetailId = _orderDetailsRepository.GenerateId();
                 OrderDetail orderDetail = new OrderDetail(orderDetailId, orderId, dto.ProductId, dto.Price, dto.Quantity);
 
-                if (orderDetail == null) throw new NullOrderDetailException();
-
                 _orderDetailsRepository.AddOrderDetail(orderDetail);
                 totalAmount += dto.Price * dto.Quantity;
             }
-
-            if (order == null) throw new NullOrderException();
 
             order.Amount = totalAmount;
             _ordersRepository.AddOrder(order);

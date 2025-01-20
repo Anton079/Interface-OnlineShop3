@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Reflection.Metadata.Ecma335;
+using Interface_OnlineShop3.System.Exceptions;
+using Interface_OnlineShop3.Products.Exceptions;
 
 namespace Interface_OnlineShop3.System
 {
@@ -29,7 +31,7 @@ namespace Interface_OnlineShop3.System
 
             if (detailsDto.Quantity > product.Stock)
             {
-                return false;
+                throw new QuantityProductNotFoundException();
             }
 
             OrderDetailsDto orderDetails =this.FindDetailByProductName(product.Name);
@@ -54,8 +56,8 @@ namespace Interface_OnlineShop3.System
             return this.orderDetailsDtos;
         }
 
-        //todo:functie findProduct in cos by product name
-        public OrderDetailsDto FindDetailByProductName(string productName)
+        //todo: functie findProduct in cos by product name
+        private OrderDetailsDto FindDetailByProductName(string productName)
         {
             foreach(OrderDetailsDto detailsDto in this.orderDetailsDtos)
             {
@@ -64,7 +66,7 @@ namespace Interface_OnlineShop3.System
                     return detailsDto;
                 }
             }
-            return null;
+            throw new OrderDetatilsDtoNotFound();
         }
 
         public int FindIdByProductName(string productName)
@@ -76,14 +78,14 @@ namespace Interface_OnlineShop3.System
                     return detailsDto.ProductId;
                 }
             }
-            return -1;
+            throw new ProductNotFoundException();
         }
 
-        public bool RemoveFromCos(string productName)
+        public void RemoveFromCos(string productName)
         {
             OrderDetailsDto orderDetails = this.FindDetailByProductName(productName);
 
-            if (orderDetails == null) return false;
+            if (orderDetails == null) throw new OrderDetatilsDtoNotFound();
 
             this.orderDetailsDtos.Remove(orderDetails);
 
@@ -91,16 +93,16 @@ namespace Interface_OnlineShop3.System
             if (product != null)
                 product.Stock += orderDetails.Quantity;
 
-            return true;
+           
         }
         
-        public bool EditQuantity(string productName, int newQuantity){
+        public void EditQuantity(string productName, int newQuantity){
 
-            if(newQuantity <= 0) return false;
+            if(newQuantity <= 0) throw new ProductWithoutStockException();
 
             OrderDetailsDto orderDetails = this.FindDetailByProductName(productName);
 
-            if(orderDetails == null) return false;
+            if(orderDetails == null) throw new ProductNotFoundException();
 
             Product product = this.productQueryService.FindProductById(orderDetails.ProductId);
 
@@ -109,10 +111,9 @@ namespace Interface_OnlineShop3.System
                 product.Stock += orderDetails.Quantity;
                 product.Stock -= newQuantity;
                 orderDetails.Quantity = newQuantity;
-                return true;
             }
 
-            return false;
+            throw new NullProductException();
         }
 
         public void Clear()

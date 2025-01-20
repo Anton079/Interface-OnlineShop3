@@ -42,7 +42,7 @@ namespace Interface_OnlineShop3.Users.Repository
         {
             string currentDirectory = Directory.GetCurrentDirectory();
             string folder = Path.Combine(currentDirectory, "data");
-            string file = Path.Combine(folder, "UserData.txt"); // File name for storing user data
+            string file = Path.Combine(folder, "UserData");
             return file;
         }
 

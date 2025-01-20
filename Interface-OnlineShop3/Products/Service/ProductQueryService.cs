@@ -49,10 +49,11 @@ namespace Interface_OnlineShop3.Products.Service
         public int FindProductIdByName(string nameProduct)
         {
             Product product = _prodRepository.FindByName(nameProduct);
-            if(product != null)
+            if (product != null)
             {
                 return product.Id;
-            }else
+            }
+            else
             {
                 throw new ProductNotFoundException();
             }
@@ -97,5 +98,49 @@ namespace Interface_OnlineShop3.Products.Service
                 throw new ProductNotFoundException();
             }
         }
+
+        public List<Product> FindProductsByName(string searchTerm)
+        {
+            List<Product> products = getAll();
+            List<Product> filteredProducts = new List<Product>();
+
+            foreach (Product product in products)
+            {
+                if (product.Name.ToLower().Contains(searchTerm) || product.Descriptions.ToLower().Contains(searchTerm))
+                {
+                    filteredProducts.Add(product);
+                }
+            }
+
+            if (filteredProducts.Count == 0)
+            {
+                throw new QuantityProductNotFoundException();
+            }
+
+            return filteredProducts;
+
+        }
+
+        public List<Product> FindMinAndMaxProductsPrice(int minPrice, int maxPrice)
+        {
+            List<Product> products = getAll();
+            List<Product> filteredProducts = new List<Product>();
+
+            foreach (Product product in products)
+            {
+                if (product.Price >= minPrice && product.Price <= maxPrice)
+                {
+                    filteredProducts.Add(product);
+                }
+            }
+
+            if (filteredProducts.Count == 0)
+            {
+                throw new QuantityProductNotFoundException();
+            }
+
+            return filteredProducts;
+        }
+
     }
 }

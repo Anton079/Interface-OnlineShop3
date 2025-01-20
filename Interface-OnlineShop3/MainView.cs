@@ -15,6 +15,8 @@ using Interface_OnlineShop3.System.DTOs;
 using Interface_OnlineShop3.System.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -170,48 +172,59 @@ namespace Interface_OnlineShop3
 
             string productName = productWanted.ToLower();
 
-            int productId = _productQueryService.FindProductIdByName(productName);
-            int productStockAvailable = _productQueryService.FindProductStockByName(productName);
-
-            Console.WriteLine("Ce cantitate doresti");
-            int quantityWanted = Int32.Parse(Console.ReadLine());
-
-            if (quantityWanted > productStockAvailable)
+            try
             {
-                Console.WriteLine("Cantitea este mai mare decat ce-a disponibila!");
+                int productId = _productQueryService.FindProductIdByName(productName);
+                int productStockAvailable = _productQueryService.FindProductStockByName(productName);
+
+                Console.WriteLine("Ce cantitate doresti");
+                int quantityWanted = Int32.Parse(Console.ReadLine());
+
+                if (quantityWanted > productStockAvailable)
+                {
+                    Console.WriteLine("Cantitea este mai mare decat ce-a disponibila!");
+                }
+
+                int price = _productQueryService.FindProductPriceByName(productName);
+
+                OrderDetailsDto newProduct = new OrderDetailsDto(productId, productName, quantityWanted, price);
+                _cos.AddCos(newProduct);
+
+            }catch (ProductNotFoundException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }catch(QuantityProductNotFoundException ex)
+            {
+                Console.WriteLine(ex.Message);
             }
 
-            int price = _productQueryService.FindProductPriceByName(productName);
-
-            OrderDetailsDto newProduct = new OrderDetailsDto(productId, productName, quantityWanted, price);
-            _cos.AddCos(newProduct);
             Console.WriteLine("Produsul a fost adaugat cu succes!");
         }
 
         //update
         public void EditQuantity()
         {
-            bool edited = false;
-
             Console.WriteLine("Introdu numele produsului: ");
             string productName = Console.ReadLine();
             Console.WriteLine("Introdu noua cantiate: ");
             int newQuantity = int.Parse(Console.ReadLine());
 
-            int productStockAvailable = _productQueryService.FindProductStockByName(productName);
+            try
+            {
+                int productStockAvailable = _productQueryService.FindProductStockByName(productName);
 
-            if (newQuantity > productStockAvailable)
+                if (newQuantity > productStockAvailable)
+                {
+                    Console.WriteLine($"Cantitea dorita este mai mare decat ce-a disponibila, tu ai ales {newQuantity}, in stock se afla maxim {productStockAvailable}!");
+                }
+
+                _cos.EditQuantity(productName, newQuantity);
+            }catch (ProductNotFoundException ex)
             {
-                Console.WriteLine($"Cantitea este mai mare decat ce-a disponibila, tu ai ales {newQuantity}, in stock se afla maxim {productStockAvailable}!");
-            }
-            if(edited)
+                Console.WriteLine(ex.Message);
+            }catch (QuantityProductNotFoundException ex)
             {
-                Console.WriteLine("Cantitatea din cos s-a modificat!");
-                edited = _cos.EditQuantity(productName, newQuantity);
-            }
-            else
-            {
-                Console.WriteLine("Cantitatea din cos nu s-a modificat!");
+                Console.WriteLine(ex.Message);
             }
         }
 
@@ -223,15 +236,7 @@ namespace Interface_OnlineShop3
 
             try
             {
-                bool removed = _cos.RemoveFromCos(productName);
-                if (removed)
-                {
-                    Console.WriteLine("Produsul a fost șters din coș!");
-                }
-                else
-                {
-                    //throw new RemoveFromCosException($"Produsul '{productName}' nu a fost gasit în cos!");
-                }
+                _cos.RemoveFromCos(productName);
             }
             catch (RemoveFromCosException ex)
             {
@@ -257,14 +262,6 @@ namespace Interface_OnlineShop3
                 _ordersCommandService.PlaceOrder(_cos.GetAll(), customerId, customerAddress);
                 _cos.Clear();
             }
-            catch (NullOrderException ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            catch (NullOrderDetailException ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
             catch(CustomerNotFoundException ex)
             {
                 Console.WriteLine(ex.Message);
@@ -276,24 +273,24 @@ namespace Interface_OnlineShop3
         //istoric comenzi
         public void ViewOrderHistory()
         {
-            try
+            List<Order> orders = _ordersQueryService.GetAllOrders();
+            List<OrderDetail> orderDetails = _orderDetailsQueryService.GetAllOrderDetails();
+
+            if (orders == null || orders.Count == 0)
             {
-                List<Order> orders = _ordersQueryService.GetAllOrders();
-                List<OrderDetail> orderDetails = _orderDetailsQueryService.GetAllOrderDetails();
+                Console.WriteLine("Nu ati comandat nimic pentru a afisa istoricul comenzilor!");
+                return;
+            }
 
-                if (orders == null || orders.Count == 0)
+            Console.WriteLine("    PRODUSELE PE CARE LE-AI COMANDAT   ");
+
+            // Afișăm comenzile disponibile
+            foreach (Order order in orders)
+            {
+                Console.WriteLine();
+                Console.WriteLine($"Comanda cu ID: {order.Id}, cu totalul de: {order.Amount}!");
+                try
                 {
-                    Console.WriteLine("Nu ati comandat nimic pentru a afisa istoricul comenzilor!");
-                    return;
-                }
-
-                Console.WriteLine("    PRODUSELE PE CARE LE-AI COMANDAT   ");
-
-                // Afișăm comenzile disponibile
-                foreach (Order order in orders)
-                {
-                    Console.WriteLine();
-                    Console.WriteLine($"Comanda cu ID: {order.Id}, cu totalul de: {order.Amount}!");
                     foreach (OrderDetail detail in orderDetails)
                     {
                         if (detail.OrderId == order.Id)
@@ -302,31 +299,36 @@ namespace Interface_OnlineShop3
                             Console.Write($"{productName}, ");
                         }
                     }
-                }
-
-                Console.WriteLine();
-                Console.WriteLine("Introduceti ID-ul comenzii pentru a vedea mai multe detalii sau apasati 0 pentru a iesi: ");
-
-                // Solicităm utilizatorului un ID de comandă
-                string input = Console.ReadLine();
-                int selectedOrderId = 0;
-
-                try
-                {
-                    selectedOrderId = int.Parse(input);
-                }
-                catch (FormatException ex)
+                }catch(ProductNotFoundException ex)
                 {
                     Console.WriteLine(ex.Message);
-                    return;
                 }
+            }
 
-                if (selectedOrderId == 0)
-                {
-                    Console.WriteLine("Iesire din istoricul comenzilor.");
-                    return;
-                }
+            Console.WriteLine();
+            Console.WriteLine("Introduceti ID-ul comenzii pentru a vedea mai multe detalii sau apasati 0 pentru a iesi: ");
 
+            // Solicităm utilizatorului un ID de comandă
+            string input = Console.ReadLine();
+            int selectedOrderId = 0;
+
+            try
+            {
+                selectedOrderId = int.Parse(input);
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine("Eroare la conversie intre int si string");
+            }
+
+            if (selectedOrderId == 0)
+            {
+                Console.WriteLine("Iesire din istoricul comenzilor.");
+              
+            }
+
+            try
+            {
                 // Găsim comanda cu ID-ul introdus
                 Order selectedOrder = null;
                 foreach (Order order in orders)
@@ -360,11 +362,7 @@ namespace Interface_OnlineShop3
             catch(OrderNotFoundException ex)
             {
                 Console.WriteLine(ex.Message);
-            }catch(OrderDetailsNotFoundException ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            catch (ProductNotFoundException ex)
+            }catch(ProductNotFoundException ex)
             {
                 Console.WriteLine(ex.Message);
             }
@@ -374,30 +372,17 @@ namespace Interface_OnlineShop3
         public void SearchProduct()
         {
             Console.WriteLine("Introduceti numele sau un cuvant cheie pentru a cauta un produs: ");
-            string searchTerm = Console.ReadLine().ToLower();
+            string searchTerm = Console.ReadLine();
 
-            List<Product> products = _productQueryService.getAll();
-            List<Product> filteredProducts = new List<Product>();
-
-            foreach (Product product in products)
+            try
             {
-                if (product.Name.ToLower().Contains(searchTerm) || product.Descriptions.ToLower().Contains(searchTerm))
+                List<Product> products = _productQueryService.FindProductsByName(searchTerm);
+                foreach (Product x in products)
                 {
-                    filteredProducts.Add(product);
+                    Console.WriteLine(x.Name, x.Price, x.Descriptions);
                 }
-            }
+            }catch(QuantityProductNotFoundException ex) { Console.WriteLine(ex.Message); }
 
-            if (filteredProducts.Count == 0)
-            {
-                Console.WriteLine("Nu s-au gasit produse care sa corespunda cautarii ");
-                return;
-            }
-
-            Console.WriteLine("Produsele gasite: ");
-            foreach (Product product in filteredProducts)
-            {
-                Console.WriteLine("Nume: " + product.Name + " | Descriere: " + product.Descriptions + " | Stoc: " + product.Stock);
-            }
         }
 
         //afiseaza o lista filtrara cu price ul de la tine
@@ -409,28 +394,15 @@ namespace Interface_OnlineShop3
             Console.WriteLine("Introduceti pretul maxim:");
             int maxPrice = int.Parse(Console.ReadLine());
 
-            List<Product> products = _productQueryService.getAll();
-            List<Product> filteredProducts = new List<Product>();
-
-            foreach (Product product in products)
+            try
             {
-                if (product.Price >= minPrice && product.Price <= maxPrice)
+                List<Product> products = _productQueryService.FindMinAndMaxProductsPrice(minPrice, maxPrice);
+                foreach (Product x in products)
                 {
-                    filteredProducts.Add(product);
+                    Console.WriteLine(x.Name, x.Price, x.Descriptions);
                 }
             }
-
-            if (filteredProducts.Count == 0)
-            {
-                Console.WriteLine("Nu s-au gasit produse in aceasta gama de pret.");
-                return;
-            }
-
-            Console.WriteLine("Produsele in aceasta gama de pret:");
-            foreach (Product product in filteredProducts)
-            {
-                Console.WriteLine("Nume: " + product.Name + " | Pret: " + product.Price + " | Stoc: " + product.Stock);
-            }
+            catch (QuantityProductNotFoundException ex) { Console.WriteLine(ex.Message); }
         }
 
     }

@@ -23,10 +23,5 @@ namespace Interface_OnlineShop3.Users.Models
         {
             return base.ToSave();
         }
-
-        //tema
-        //termin cu users, unde ii mai adaug 2 proprietati, username si password
-        //fac admin si ii fac mostenire de la users cu el
-        //si sa fac sistemul de login full
     }
 }

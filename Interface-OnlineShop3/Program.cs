@@ -50,18 +50,16 @@ namespace Interface_OnlineShop3
             Cos cos = new Cos(productQueryService);
 
 
-            //ViewLogin viewLogin = new ViewLogin(productComandService,productRepository,adminQueryService,adminRepository, 
-            //    customerQueryService,customerRepository, ordersCommandService,  orderDetailsCommandService,productQueryService,
-            //    ordersQueryService,orderDetailsQueryService,cos);
+            ViewLogin viewLogin = new ViewLogin(productComandService, productRepository, adminQueryService, adminRepository,
+                customerQueryService, customerRepository, ordersCommandService, orderDetailsCommandService, productQueryService,
+                ordersQueryService, orderDetailsQueryService, cos);
 
-            //viewLogin.Play();
-
-
-          
-
-            ordersCommandService.RemoveOrders(1);
+            viewLogin.Play();
 
 
+
+
+            //ordersCommandService.RemoveOrders(1);
 
 
 

@@ -34,7 +34,7 @@ namespace Interface_OnlineShop3.Customers.Service
             }
             else
             {
-                throw new CustomerNotFoundException();
+                return null;
             }
         }
 

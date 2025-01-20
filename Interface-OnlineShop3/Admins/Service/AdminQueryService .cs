@@ -34,7 +34,7 @@ namespace Interface_OnlineShop3.Admins.Service
             }
             else
             {
-                throw new AdminNotFoundException(); 
+                return null;
             }
         }
     }
