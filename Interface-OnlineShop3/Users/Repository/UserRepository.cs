@@ -22,27 +22,42 @@ namespace Interface_OnlineShop3.Users.Repository
         {
             try
             {
-                using (StreamReader sr = new StreamReader(GetFilePath()))
+                string filePath = GetFilePath();
+                if (!File.Exists(filePath))
+                {
+                    Console.WriteLine($"Fisierul {filePath} nu exista");
+                    return;
+                }
+
+                using (StreamReader sr = new StreamReader(filePath))
                 {
                     string line;
                     while ((line = sr.ReadLine()) != null)
                     {
-                        User user = new User(line);
-                        userList.Add(user);
+                        string type = line.Split(',')[0];
+
+                        switch (type)
+                        {
+                            case "Admin": userList.Add(new Admin(line)); break;
+                            case "Customer": userList.Add(new Customer(line)); break;
+                        }
                     }
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error loading user data: {ex.Message}");
+                Console.WriteLine(ex);
             }
         }
 
         public string GetFilePath()
         {
             string currentDirectory = Directory.GetCurrentDirectory();
+
             string folder = Path.Combine(currentDirectory, "data");
-            string file = Path.Combine(folder, "UserData");
+
+            string file = Path.Combine(folder, "User");
+
             return file;
         }
 
@@ -57,7 +72,7 @@ namespace Interface_OnlineShop3.Users.Repository
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error saving user data: {ex.Message}");
+                Console.WriteLine(ex);
             }
         }
 
@@ -114,11 +129,21 @@ namespace Interface_OnlineShop3.Users.Repository
         {
             User userToUpdate = FindById(id);
 
-            userToUpdate.FullName = user.FullName;
-            userToUpdate.UserName = user.UserName;
-            userToUpdate.Email = user.Email;
-            userToUpdate.Password = user.Password;
-            userToUpdate.BillingAddress = user.BillingAddress;
+            if(userToUpdate is Customer customerToUpdate && user is Customer customer)
+            {
+                userToUpdate.FullName = customer.FullName;
+                userToUpdate.UserName = customer.UserName;
+                userToUpdate.Email = customer.Email;
+                userToUpdate.Password = customer.Password;
+                userToUpdate.BillingAddress = customer.BillingAddress;
+            }else if(userToUpdate is Admin adminToUpdate && user is Admin admin)
+            {
+                adminToUpdate.FullName = admin.FullName;
+                adminToUpdate.UserName = admin.UserName;
+                adminToUpdate.Email = admin.Email;
+                adminToUpdate.Password = admin.Password;
+                adminToUpdate.BillingAddress = admin.BillingAddress;
+            }
 
             SaveData();
             return userToUpdate;

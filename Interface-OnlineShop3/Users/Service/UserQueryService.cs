@@ -26,9 +26,9 @@ namespace Interface_OnlineShop3.Users.Service
 
         public User FindUserById(int id)
         {
-            if (id != -1) throw new UserNotFoundException();
-
-            return  _userRepository.FindById(id);
+            User user = _userRepository.FindById(id);
+            if (user == null) throw new UserNotFoundException();
+            return user;
         }
     }
 }

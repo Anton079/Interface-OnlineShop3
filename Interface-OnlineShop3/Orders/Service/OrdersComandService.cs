@@ -1,21 +1,11 @@
-﻿using Interface_OnlineShop3.Customers.Exceptions;
-using Interface_OnlineShop3.Customers.Models;
-using Interface_OnlineShop3.Customers.Repository;
-using Interface_OnlineShop3.OrderDetails.Exceptions;
-using Interface_OnlineShop3.OrderDetails.Models;
+﻿using Interface_OnlineShop3.OrderDetails.Models;
 using Interface_OnlineShop3.OrderDetails.Repository;
 using Interface_OnlineShop3.Orders.Exceptions;
 using Interface_OnlineShop3.Orders.Models;
 using Interface_OnlineShop3.Orders.Repository;
-using Interface_OnlineShop3.Products.Models;
 using Interface_OnlineShop3.Products.Repository;
-using Interface_OnlineShop3.System;
 using Interface_OnlineShop3.System.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Interface_OnlineShop3.Users.Exceptions;
 
 namespace Interface_OnlineShop3.Orders.Service
 {

@@ -1,5 +1,4 @@
-﻿using Interface_OnlineShop3.Admins.Models;
-using Interface_OnlineShop3.Customers.Models;
+﻿using Interface_OnlineShop3.OrderDetails.Exceptions;
 using Interface_OnlineShop3.OrderDetails.Models;
 using Interface_OnlineShop3.OrderDetails.Service;
 using Interface_OnlineShop3.Orders.Models;
@@ -10,6 +9,7 @@ using Interface_OnlineShop3.Products.Repository;
 using Interface_OnlineShop3.Products.Service;
 using Interface_OnlineShop3.System;
 using Interface_OnlineShop3.System.DTOs;
+using Interface_OnlineShop3.Users.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -124,20 +124,23 @@ namespace Interface_OnlineShop3
             Console.WriteLine("Introduceti ID-ul comenzii pentru a vizualiza detaliile:");
             int orderId = int.Parse(Console.ReadLine());
 
-            List<OrderDetail> orderDetails = _orderDetailsQueryService.GetAllOrderDetails();
-
-            Console.WriteLine($"Detalii pentru comanda ID: {orderId}");
-            foreach (OrderDetail detail in orderDetails)
+            try
             {
-                if (detail.OrderId == orderId)
+                List<OrderDetail> orderDetails = _orderDetailsQueryService.GetAllOrderDetails();
+                // aici trebuie sa pun un throw pentur a arunca exceptia?
+
+                Console.WriteLine($"Detalii pentru comanda ID: {orderId}");
+                foreach (OrderDetail detail in orderDetails)
                 {
-                    string productName = _productQueryService.FindProductNameById(detail.ProductId);
-                    Console.WriteLine($"Produs: {productName}, Cantitate: {detail.Quantity}, Pret: {detail.Price}");
+                    if (detail.OrderId == orderId)
+                    {
+                        string productName = _productQueryService.FindProductNameById(detail.ProductId);
+                        Console.WriteLine($"Produs: {productName}, Cantitate: {detail.Quantity}, Pret: {detail.Price}");
+                    }
                 }
-            }
+            }catch(NullOrderDetailException ex) {Console.WriteLine(ex.Message); return; }
         }
 
-        // Gestionarea produselor
         public void ManageProducts()
         {
             Console.WriteLine("1. Adaugare produs");
@@ -164,7 +167,6 @@ namespace Interface_OnlineShop3
             }
         }
 
-        // Adaugare produs
         private void AddProduct()
         {
             int generatorId = _productRepository.GenerateId();
@@ -247,8 +249,6 @@ namespace Interface_OnlineShop3
             Console.WriteLine("Produsul a fost modificat cu succes!");
         }
 
-
-        // Ștergere produs
         private void RemoveProduct()
         {
             Console.WriteLine("Introduceti ID-ul produsului pe care doriti sa il stergeti:");

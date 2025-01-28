@@ -1,10 +1,10 @@
-﻿using Interface_OnlineShop3.Customers.Models;
-using Interface_OnlineShop3.OrderDetails.Models;
+﻿using Interface_OnlineShop3.OrderDetails.Models;
 using Interface_OnlineShop3.OrderDetails.Service;
 using Interface_OnlineShop3.Orders.Models;
 using Interface_OnlineShop3.Orders.Service;
 using Interface_OnlineShop3.Products.Models;
 using Interface_OnlineShop3.Products.Service;
+using Interface_OnlineShop3.Users.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;

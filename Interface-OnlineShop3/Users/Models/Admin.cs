@@ -1,5 +1,4 @@
-﻿using Interface_OnlineShop3.Customers.Models;
-using Interface_OnlineShop3.Users.Models;
+﻿using Interface_OnlineShop3.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,17 +6,17 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Interface_OnlineShop3.Admins.Models
+namespace Interface_OnlineShop3.Users.Models
 {
     public class Admin : User
     {
-        public Admin(int id, string userName, string fullName, string email, string password, string billingAddress) : 
-            base( id,  userName,  fullName,  email,  password,  billingAddress)
+        public Admin(int id, string type, string userName, string fullName, string email, string password, string billingAddress) :
+            base(id, type, userName, fullName, email, password, billingAddress)
         {
-           
+
         }
 
-        public Admin(string proprietati) : base (proprietati)
+        public Admin(string proprietati) : base(proprietati)
         {
             string[] token = proprietati.Split(',');
         }

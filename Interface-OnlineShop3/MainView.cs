@@ -1,6 +1,4 @@
-﻿using Interface_OnlineShop3.Customers.Exceptions;
-using Interface_OnlineShop3.Customers.Models;
-using Interface_OnlineShop3.OrderDetails.Exceptions;
+﻿using Interface_OnlineShop3.OrderDetails.Exceptions;
 using Interface_OnlineShop3.OrderDetails.Models;
 using Interface_OnlineShop3.OrderDetails.Service;
 using Interface_OnlineShop3.Orders.Exceptions;
@@ -13,6 +11,8 @@ using Interface_OnlineShop3.Products.Service;
 using Interface_OnlineShop3.System;
 using Interface_OnlineShop3.System.DTOs;
 using Interface_OnlineShop3.System.Exceptions;
+using Interface_OnlineShop3.Users.Exceptions;
+using Interface_OnlineShop3.Users.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -308,7 +308,7 @@ namespace Interface_OnlineShop3
             Console.WriteLine();
             Console.WriteLine("Introduceti ID-ul comenzii pentru a vedea mai multe detalii sau apasati 0 pentru a iesi: ");
 
-            // Solicităm utilizatorului un ID de comandă
+            
             string input = Console.ReadLine();
             int selectedOrderId = 0;
 
@@ -329,7 +329,7 @@ namespace Interface_OnlineShop3
 
             try
             {
-                // Găsim comanda cu ID-ul introdus
+                
                 Order selectedOrder = null;
                 foreach (Order order in orders)
                 {
@@ -349,7 +349,6 @@ namespace Interface_OnlineShop3
                 Console.WriteLine();
                 Console.WriteLine($"Detalii pentru comanda cu ID: {selectedOrder.Id}, cu totalul de: {selectedOrder.Amount}!");
 
-                // Afișăm detaliile comenzii selectate
                 foreach (OrderDetail detail in orderDetails)
                 {
                     if (detail.OrderId == selectedOrder.Id)

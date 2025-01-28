@@ -22,7 +22,7 @@ namespace Interface_OnlineShop3.Users.Service
 
         public User AddUser(User user)
         {
-            if (user == null) throw new NullUserException();
+            if (user != null) throw new NullUserException();
 
             _userRepository.AddUser(user);
             return user;
@@ -30,7 +30,7 @@ namespace Interface_OnlineShop3.Users.Service
 
         public int RemoveUser(int id)
         {
-            if(id != -1) throw new UserNotFoundException();
+            if(id == -1) throw new UserNotFoundException();
 
             _userRepository.Remove(id);
             return id;
@@ -38,7 +38,7 @@ namespace Interface_OnlineShop3.Users.Service
 
         public User UpdateUser(int id, User user)
         {
-            if (id != -1) throw new OrderNotFoundException();
+            if (id != -1) throw new UserNotFoundException();
 
             _userRepository.UpdateUser(id, user);
             return user;

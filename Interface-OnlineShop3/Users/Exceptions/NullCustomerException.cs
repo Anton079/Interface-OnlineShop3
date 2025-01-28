@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Interface_OnlineShop3.Admins.Extensions
+namespace Interface_OnlineShop3.Users.Exceptions
 {
-    internal class AdminNotFoundException : Exception
+    internal class NullCustomerException : Exception
     {
-        public AdminNotFoundException() : base(ExceptionMessages.AdminNotFoundException)
+        public NullCustomerException() : base(ExceptionMessages.NullCustomerException)
         {
 
         }

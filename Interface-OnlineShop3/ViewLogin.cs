@@ -1,30 +1,19 @@
-﻿using Interface_OnlineShop3.Admins.Extensions;
-using Interface_OnlineShop3.Admins.Models;
-using Interface_OnlineShop3.Admins.Repository;
-using Interface_OnlineShop3.Admins.Service;
-using Interface_OnlineShop3.Customers.Exceptions;
-using Interface_OnlineShop3.Customers.Models;
-using Interface_OnlineShop3.Customers.Repository;
-using Interface_OnlineShop3.Customers.Service;
+﻿using Interface_OnlineShop3.Users.Repository;
+using Interface_OnlineShop3.Users.Service;
 using Interface_OnlineShop3.OrderDetails.Service;
 using Interface_OnlineShop3.Orders.Service;
 using Interface_OnlineShop3.Products.Repository;
 using Interface_OnlineShop3.Products.Service;
 using Interface_OnlineShop3.System;
+using Interface_OnlineShop3.Users.Exceptions;
 using Interface_OnlineShop3.Users.Models;
-using Interface_OnlineShop3.Users.Service;
 using System;
+using Interface_OnlineShop3.Users.Service.Interface_OnlineShop3.Users.Service;
 
 namespace Interface_OnlineShop3
 {
     public class ViewLogin
     {
-        private IAdminQueryService _adminQueryService;
-        private IAdminRepository _adminRepository;
-
-        private ICustomerQueryService _customerQueryService;
-        private ICustomerRepository _customerRepository;
-
         private IOrdersCommandService _ordersCommandService;
         private IOrderDetailsCommandService _orderDetailsCommandService;
 
@@ -32,25 +21,30 @@ namespace Interface_OnlineShop3
         private IProductRepository _productRepository;
         private IProductComandService _productComandService;
 
+        private IUserRepository _userRepository;
+        private IUserQueryService _userQueryService;
+        private IUserCommandService _userCommandService;
+
         private IOrdersQueryService _ordersQueryService;
         private IOrderDetailsQueryService _orderDetailsQueryService;
         private ICos _cos;
 
-        public ViewLogin(IProductComandService productComandService, IProductRepository productRepository, IAdminQueryService adminQueryService, IAdminRepository adminRepository,
-       ICustomerQueryService customerQueryService, ICustomerRepository customerRepository,
+        public ViewLogin(IUserRepository userRepository, IUserQueryService userQueryService, IUserCommandService userCommandService, IProductComandService productComandService, IProductRepository productRepository,
        IOrdersCommandService ordersCommandService, IOrderDetailsCommandService orderDetailsCommandService,
        IProductQueryService productQueryService, IOrdersQueryService ordersQueryService,
        IOrderDetailsQueryService orderDetailsQueryService, ICos cos)
         {
+            _userRepository = userRepository;
+            _userCommandService = userCommandService;
+            _productQueryService = productQueryService;
+
             _productComandService = productComandService;
             _productRepository = productRepository;
-            _adminQueryService = adminQueryService;
-            _adminRepository = adminRepository;
-            _customerQueryService = customerQueryService;
-            _customerRepository = customerRepository;
+            _productQueryService = productQueryService;
+
             _ordersCommandService = ordersCommandService;
             _orderDetailsCommandService = orderDetailsCommandService;
-            _productQueryService = productQueryService;
+
             _ordersQueryService = ordersQueryService;
             _orderDetailsQueryService = orderDetailsQueryService;
             _cos = cos;
@@ -99,52 +93,45 @@ namespace Interface_OnlineShop3
 
             try
             {
-                Admin adminWanted = _adminQueryService.FindAdminById(idLogin);
+                User user = _userQueryService.FindUserById(idLogin);
 
-                Customer customerWanted = _customerQueryService.FindCustomerById(idLogin);
+                switch (user.Type)
+                {
+                    case "Admin":
+                        if (user is Admin admin)
+                        {
+                            ViewAdmin viewAdmin = new ViewAdmin(admin,
+                                 _productRepository,
+                                 _productComandService,
+                                 _ordersCommandService,
+                                 _orderDetailsCommandService,
+                                 _productQueryService,
+                                 _ordersQueryService,
+                                 _orderDetailsQueryService);
+                        }
+                        break;
 
-                if (adminWanted != null && adminWanted.Password == parolaLogin)
-                {
-                    ViewAdmin adminView = new ViewAdmin(
-                        adminWanted,
-                        _productRepository,
-                        _productComandService,
-                        _ordersCommandService,
-                        _orderDetailsCommandService,
-                        _productQueryService,
-                        _ordersQueryService,
-                        _orderDetailsQueryService
-                    );
-                    Console.WriteLine($"Bine ati venit, Admin: {adminWanted.FullName}");
-                    adminView.Play();
-                }
-                else if (customerWanted != null && customerWanted.Password == parolaLogin)
-                {
-                    MainView viewMain = new MainView(
-                        customerWanted,
-                        _cos,
-                        _ordersCommandService,
-                        _orderDetailsCommandService,
-                        _productQueryService,
-                        _ordersQueryService,
-                        _orderDetailsQueryService
-                    );
-                    Console.WriteLine($"Bine ati venit, Client: {customerWanted.FullName}");
-                    viewMain.Play();
-                }
-                else
-                {
-                    Console.WriteLine("ID sau parola gresite. Reincercati.");
+                    case "Customer":
+                        if (user is Customer customer)
+                        {
+                            MainView viewCustomer = new MainView(customer, _cos,
+                                _ordersCommandService,
+                                _orderDetailsCommandService,
+                                _productQueryService,
+                                _ordersQueryService,
+                                _orderDetailsQueryService);
+                        }
+                        break;
+
+                    default:
+                        Console.WriteLine("Tip utilizator necunoscut.");
+                        break;
                 }
             }
-            catch (CustomerNotFoundException ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            catch (AdminNotFoundException ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+            catch (CustomerNotFoundException ex){ Console.WriteLine(ex.Message);}
+            catch (AdminNotFoundException ex){ Console.WriteLine(ex.Message);}
+            catch (NullUserException ex) { Console.WriteLine(ex.Message); }
+            catch (UserNotFoundException ex) { Console.WriteLine(ex.Message); }
         }
 
         public void NewRegistration()
@@ -154,10 +141,10 @@ namespace Interface_OnlineShop3
 
             switch (tip)
             {
-                case "admin":
+                case "Admin":
                     RegisterAdmin();
                     break;
-                case "client":
+                case "Customer":
                     RegisterCustomer();
                     break;
                 default:
@@ -168,11 +155,13 @@ namespace Interface_OnlineShop3
 
         private void RegisterAdmin()
         {
-            Console.WriteLine("Introduceti numele complet:");
-            string fullName = Console.ReadLine();
+            string type = "Admin";
 
             Console.WriteLine("Introduceti numele de utilizator:");
             string username = Console.ReadLine();
+
+            Console.WriteLine("Introduceti numele complet:");
+            string fullName = Console.ReadLine();
 
             Console.WriteLine("Introduceti emailul:");
             string email = Console.ReadLine();
@@ -180,12 +169,15 @@ namespace Interface_OnlineShop3
             Console.WriteLine("Introduceti parola:");
             string password = Console.ReadLine();
 
+            Console.WriteLine("Introduceti adresa:");
+            string billingAddress = Console.ReadLine();
+
             try
             {
-                int id = _adminRepository.GenerateId();
-                Admin admin = new Admin(id, username, fullName, email, password, "Adresa Facturare");
-                _adminRepository.AddAdmin(admin);
-                Console.WriteLine($"Admin inregistrat cu succes! ID-ul dumneavoastra este: {id}");
+                int id = _userRepository.GenerateId();
+                Admin admin = new Admin(id, type, username, fullName, email, password, billingAddress);
+                _userRepository.AddUser(admin);
+                Console.WriteLine($"Admin înregistrat cu succes! ID-ul dumneavoastră este: {id}");
             }
             catch (NullAdminException ex)
             {
@@ -195,11 +187,13 @@ namespace Interface_OnlineShop3
 
         private void RegisterCustomer()
         {
-            Console.WriteLine("Introduceti numele complet:");
-            string fullName = Console.ReadLine();
+            string type = "Customer";
 
             Console.WriteLine("Introduceti numele de utilizator:");
             string username = Console.ReadLine();
+
+            Console.WriteLine("Introduceti numele complet:");
+            string fullName = Console.ReadLine();
 
             Console.WriteLine("Introduceti emailul:");
             string email = Console.ReadLine();
@@ -207,12 +201,15 @@ namespace Interface_OnlineShop3
             Console.WriteLine("Introduceti parola:");
             string password = Console.ReadLine();
 
+            Console.WriteLine("Introduceti adresa:");
+            string billingAddress = Console.ReadLine();
+
             try
             {
-                int id = _customerRepository.GenerateId();
-                Customer customer = new Customer(id, username, fullName, email, password, "Adresa Facturare");
-                _customerRepository.AddCustomer(customer);
-                Console.WriteLine($"Client inregistrat cu succes! ID-ul dumneavoastra este: {id}");
+                int id = _userRepository.GenerateId();
+                Customer customer = new Customer(id, type, username, fullName, email, password, billingAddress);
+                _userRepository.AddUser(customer);
+                Console.WriteLine($"Client înregistrat cu succes! ID-ul dumneavoastră este: {id}");
             }
             catch (NullCustomerException ex)
             {
@@ -233,48 +230,45 @@ namespace Interface_OnlineShop3
 
             switch (tip)
             {
-                case "admin":
+                case "Admin":
                     try
                     {
-                        Admin admin = _adminQueryService.FindAdminById(id);
-
+                        Admin admin = (Admin)_userQueryService.FindUserById(id);
                         if (admin != null)
                         {
                             admin.Password = parolaNoua;
-                            _adminRepository.UpdateAdmin(id, admin);
-                            Console.WriteLine("Parola actualizata cu succes pentru Admin.");
+                            _userRepository.UpdateUser(id, admin);
+                            Console.WriteLine("Parola actualizată cu succes pentru Admin.");
                         }
                         else
                         {
-                            Console.WriteLine("Adminul nu a fost gasit.");
+                            Console.WriteLine("Adminul nu a fost găsit.");
                         }
                     }
                     catch (AdminNotFoundException ex) { Console.WriteLine(ex.Message); }
-                    catch (NullAdminException ex ) { Console.WriteLine(ex.Message); }
+                    catch (NullAdminException ex) { Console.WriteLine(ex.Message); }
                     break;
 
-                case "client":
+                case "Customer":
                     try
                     {
-                        Customer customer = _customerQueryService.FindCustomerById(id);
+                        Customer customer = (Customer)_userQueryService.FindUserById(id);
                         if (customer != null)
                         {
                             customer.Password = parolaNoua;
-                            _customerRepository.UpdateCustomer(id, customer);
-                            Console.WriteLine("Parola actualizata cu succes pentru Client.");
+                            _userRepository.UpdateUser(id, customer);
+                            Console.WriteLine("Parola actualizată cu succes pentru Client.");
                         }
                         else
                         {
-                            Console.WriteLine("Clientul nu a fost gasit.");
+                            Console.WriteLine("Clientul nu a fost găsit.");
                         }
-                    }catch(CustomerNotFoundException ex) { Console.WriteLine(ex.Message); }
-                    catch(NullCustomerException ex) { Console.WriteLine(ex.Message) ; }
-                    break;
-
-                default:
-                    Console.WriteLine("Tip utilizator invalid.");
+                    }
+                    catch (CustomerNotFoundException ex) { Console.WriteLine(ex.Message); }
+                    catch (NullCustomerException ex) { Console.WriteLine(ex.Message); }
                     break;
             }
+
         }
 
 

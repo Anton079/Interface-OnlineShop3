@@ -1,7 +1,6 @@
 ﻿using Interface_OnlineShop3.OrderDetails.Models;
 using Interface_OnlineShop3.OrderDetails.Service;
 using Interface_OnlineShop3.Orders.Models;
-using Interface_OnlineShop3.Customers.Models;
 using System;
 using Interface_OnlineShop3.Products.Repository;
 using Interface_OnlineShop3.Products.Service;
@@ -10,16 +9,13 @@ using System.Runtime.CompilerServices;
 using System.Diagnostics;
 using Interface_OnlineShop3.Orders.Repository;
 using Interface_OnlineShop3.OrderDetails.Repository;
-using Interface_OnlineShop3.Customers.Repository;
 using Interface_OnlineShop3.Orders.Service;
-using Interface_OnlineShop3.Customers.Service;
 using Interface_OnlineShop3.playground;
 using Interface_OnlineShop3.System;
 using Interface_OnlineShop3.System.DTOs;
 using System.Security.Cryptography.X509Certificates;
-using Interface_OnlineShop3.Admins.Repository;
-using Interface_OnlineShop3.Admins.Service;
-using Interface_OnlineShop3.Admins.Models;
+using Interface_OnlineShop3.Users.Repository;
+using Interface_OnlineShop3.Users.Service;
 
 
 namespace Interface_OnlineShop3
@@ -30,29 +26,32 @@ namespace Interface_OnlineShop3
         {
             OrdersRepository ordersRepository = new OrdersRepository();
             OrderDetailsRepository orderDetailsRepository = new OrderDetailsRepository();
-            CustomerRepository customerRepository = new CustomerRepository();
             ProductRepository productRepository = new ProductRepository();
-            AdminRepository adminRepository = new AdminRepository();
+            UserRepository userRepository = new UserRepository(); 
 
             OrdersQueryService ordersQueryService = new OrdersQueryService(ordersRepository);
             OrdersCommandService ordersCommandService = new OrdersCommandService(ordersRepository, orderDetailsRepository, productRepository);
-
             OrderDetailsQueryService orderDetailsQueryService = new OrderDetailsQueryService(orderDetailsRepository);
             OrderDetailsCommandService orderDetailsCommandService = new OrderDetailsCommandService(orderDetailsRepository);
-
-            CustomerQueryService customerQueryService = new CustomerQueryService(customerRepository);
-            CustomerCommandService customerCommandService = new CustomerCommandService(customerRepository);
-
-            AdminQueryService adminQueryService = new AdminQueryService(adminRepository);
-
             ProductQueryService productQueryService = new ProductQueryService(productRepository);
-            ProductComandService productComandService = new ProductComandService(productRepository);
+            ProductComandService productCommandService = new ProductComandService(productRepository);
+            UserQueryService userQueryService = new UserQueryService(userRepository); 
+            UserCommandService userCommandService = new UserCommandService(userRepository); 
             Cos cos = new Cos(productQueryService);
 
+            ViewLogin viewLogin = new ViewLogin(
+                userRepository,          
+                userQueryService,        
+                userCommandService,      
+                productCommandService,
+                productRepository,
+                ordersCommandService,
+                orderDetailsCommandService,
+                productQueryService,
+                ordersQueryService,
+                orderDetailsQueryService,
+                cos);
 
-            ViewLogin viewLogin = new ViewLogin(productComandService, productRepository, adminQueryService, adminRepository,
-                customerQueryService, customerRepository, ordersCommandService, orderDetailsCommandService, productQueryService,
-                ordersQueryService, orderDetailsQueryService, cos);
 
             viewLogin.Play();
 
