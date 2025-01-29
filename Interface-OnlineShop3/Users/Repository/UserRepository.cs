@@ -22,14 +22,7 @@ namespace Interface_OnlineShop3.Users.Repository
         {
             try
             {
-                string filePath = GetFilePath();
-                if (!File.Exists(filePath))
-                {
-                    Console.WriteLine($"Fisierul {filePath} nu exista");
-                    return;
-                }
-
-                using (StreamReader sr = new StreamReader(filePath))
+                using (StreamReader sr = new StreamReader(GetFilePath()))
                 {
                     string line;
                     while ((line = sr.ReadLine()) != null)
